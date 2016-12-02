@@ -14,7 +14,7 @@ void do_drawing(cairo_t *cr, guint width, guint height)
 	cairo_set_source_rgb(cr, 0, 0, 0);
 	cairo_set_line_width(cr, 4.5);
 
-	cairo_rectangle(cr, 30, 30, 100, 100);
+	cairo_rectangle(cr, 0, 0, 50, 50);
 	cairo_set_line_width(cr, 4);
 	cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
 	cairo_stroke(cr);

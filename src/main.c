@@ -48,8 +48,8 @@ activate (GtkApplication *app,
 
 	GtkWidget *draw = gtk_drawing_area_new ();
 	gtk_widget_set_size_request (draw, 640, 400);
-	 g_signal_connect (G_OBJECT (draw), "draw",
-					   G_CALLBACK (draw_callback), NULL);
+	g_signal_connect (G_OBJECT (draw), "draw",
+					  G_CALLBACK (draw_callback), NULL);
 
 	board = gnoridor_board_new ();
 	GtkWidget *grid = gtk_grid_new ();

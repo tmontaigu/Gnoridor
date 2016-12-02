@@ -26,18 +26,21 @@ gnoridor_board_init (GnoridorBoard *self)
 	gtk_grid_set_row_homogeneous    (GTK_GRID (self), TRUE);
 
     GtkWidget *buttons[81];
+	GnoridorCell *cells[81];
+
 	for (int i = 0; i < 81; i++)
 	{
-		buttons[i] = gtk_button_new_with_label ("Cell");
+		//buttons[i] = gtk_button_new_with_label ("Cell");
+		cells[i] = gnoridor_cell_new ();
 	}
-
 
 
 	for (int i = 0; i < 9; i++)
 	{
 		for (int j = 0; j < 9; j++)
 		{
-			gtk_grid_attach (GTK_GRID (self), buttons[i + (j * 9)] ,i, j, 1,1);
+			gtk_grid_attach (GTK_GRID (self),
+							 GTK_WIDGET (cells[i + (j * 9)]), i, j, 1,1);
 		}
 	}
 }

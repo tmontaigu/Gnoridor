@@ -1,4 +1,5 @@
 #include "gnoridor-cell.h"
+#include "callback.h"
 
 G_DEFINE_TYPE (GnoridorCell, gnoridor_cell, GTK_TYPE_DRAWING_AREA);
 
@@ -21,6 +22,9 @@ static void
 gnoridor_cell_init (GnoridorCell *self)
 {
 	printf("gnoridor_cell_init\n");
+	//gtk_widget_set_size_request (GTK_DRAWING_AREA (self), 50, 50);
+	g_signal_connect (G_OBJECT   (self), "draw",
+					  G_CALLBACK (draw_callback), NULL);
 }
 
 

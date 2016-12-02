@@ -19,6 +19,7 @@
 #include <gtk/gtk.h>
 
 #include "gnoridor-board.h"
+#include "callback.h"
 
 static void
 activate (GtkApplication *app,
@@ -43,6 +44,12 @@ activate (GtkApplication *app,
 
 	// Replace the title bar with that new shiny header bar
 	gtk_window_set_titlebar (GTK_WINDOW (window), header_bar);
+
+
+	GtkWidget *draw = gtk_drawing_area_new ();
+	gtk_widget_set_size_request (draw, 640, 400);
+	 g_signal_connect (G_OBJECT (draw), "draw",
+					   G_CALLBACK (draw_callback), NULL);
 
 	board = gnoridor_board_new ();
 	GtkWidget *grid = gtk_grid_new ();

@@ -1,4 +1,5 @@
 #include "gnoridor-board.h"
+#include "gnoridor-cell.h"
 
 G_DEFINE_TYPE (GnoridorBoard, gnoridor_board, GTK_TYPE_GRID);
 
@@ -21,10 +22,24 @@ static void
 gnoridor_board_init (GnoridorBoard *self)
 {
 	printf("gnoridor_board_init\n");
-	//self->board = gtk_grid_new ();
-	self->player1 = gtk_button_new_with_label ("KOUKOU");
-	gtk_container_add (GTK_CONTAINER (self), self->player1);
-	//gtk_widget_show_all (self);
+	gtk_grid_set_column_homogeneous (GTK_GRID (self), TRUE);
+	gtk_grid_set_row_homogeneous    (GTK_GRID (self), TRUE);
+
+    GtkWidget *buttons[81];
+	for (int i = 0; i < 81; i++)
+	{
+		buttons[i] = gtk_button_new_with_label ("Cell");
+	}
+
+
+
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			gtk_grid_attach (GTK_GRID (self), buttons[i + (j * 9)] ,i, j, 1,1);
+		}
+	}
 }
 
 
@@ -35,7 +50,7 @@ gnoridor_board_dispose (GObject *gobject)
 }
 
 static void
-viewer_file_finalize (GObject *gobject)
+gnoridor_cell_finalize (GObject *gobject)
 {
   G_OBJECT_CLASS (gnoridor_board_parent_class)->finalize (gobject);
 }

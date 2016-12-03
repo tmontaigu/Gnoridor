@@ -3,6 +3,8 @@
 
 #include <gtk/gtk.h>
 
+#include "gnoridor-player.h"
+#include "gnoridor-cell.h"
 
 G_BEGIN_DECLS
 
@@ -24,8 +26,8 @@ struct _GnoridorBoard
 	GtkGrid parent_instance;
 
 	/* Other members, including private data. */
-	GtkWidget *board;
-	GtkWidget *player1;
+	GnoridorCell *cells[81];;
+	GnoridorPlayer *player1;
 	GtkWidget *player2;
 };
 
@@ -36,6 +38,7 @@ struct _GnoridorBoard
 
 
 GtkWidget *gnoridor_board_new (void);
+void       gnoridor_board_set_player_cell (int player, int col, int row);
 
 G_END_DECLS
 

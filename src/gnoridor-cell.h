@@ -26,6 +26,7 @@ struct _GnoridorCell
  * Method definitions.
  */
 GnoridorCell *gnoridor_cell_new (void);
+void          gnoridor_cell_put_player (GnoridorCell *self, GtkWidget *player);
 
 G_END_DECLS
 

@@ -26,12 +26,12 @@ gnoridor_board_init (GnoridorBoard *self)
 	gtk_grid_set_row_homogeneous    (GTK_GRID (self), TRUE);
 
     GtkWidget *buttons[81];
-	GnoridorCell *cells[81];
+
 
 	for (int i = 0; i < 81; i++)
 	{
 		//buttons[i] = gtk_button_new_with_label ("Cell");
-		cells[i] = gnoridor_cell_new ();
+		self->cells[i] = gnoridor_cell_new ();
 	}
 
 
@@ -40,9 +40,13 @@ gnoridor_board_init (GnoridorBoard *self)
 		for (int j = 0; j < 9; j++)
 		{
 			gtk_grid_attach (GTK_GRID (self),
-							 GTK_WIDGET (cells[i + (j * 9)]), i, j, 1,1);
+							 GTK_WIDGET (self->cells[i + (j * 9)]), i, j, 1,1);
 		}
 	}
+
+	self->player1 = gnoridor_player_new ();
+	self->player2 = gtk_popover_new (GTK_WIDGET (self->cells[0]));
+	gnoridor_cell_put_player (self->cells[0], self->player2);
 }
 
 

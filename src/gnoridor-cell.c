@@ -22,11 +22,21 @@ static void
 gnoridor_cell_init (GnoridorCell *self)
 {
 	printf("gnoridor_cell_init\n");
+	gtk_widget_add_events (GTK_WIDGET (self), GDK_BUTTON_PRESS_MASK);
+	self->player_on_cell = NULL;
 	//gtk_widget_set_size_request (GTK_DRAWING_AREA (self), 50, 50);
 	g_signal_connect (G_OBJECT   (self), "draw",
 					  G_CALLBACK (draw_callback), NULL);
+	g_signal_connect (G_OBJECT   (self), "button_press_event",
+					  G_CALLBACK (click_cell_callback), NULL);
 }
 
+
+void
+gnoridor_cell_put_player (GnoridorCell *self, GtkWidget *player)
+{
+	self->player_on_cell = player;
+}
 
 static void
 gnoridor_cell_dispose (GObject *gobject)

@@ -3,12 +3,6 @@
 #include "callback.h"
 #include "gnoridor-cell.h"
 
-struct {
-  int count;
-  double coordx[100];
-  double coordy[100];
-} glob;
-
 // TODO Find a way to draw the GnoridorCell depending on the size of the
 // GtkGrid that contains it.
 // TODO Add drawing of player
@@ -36,12 +30,18 @@ gboolean
 click_cell_callback (GnoridorCell *cell, gpointer data) {
 
 	if (cell->player_on_cell)
-		{
-			printf("There is a player here\n");
+	{
+		printf("There is a player here\n");
+		gtk_popover_popup (GTK_POPOVER (cell->player_on_cell));
 
-		}
+	}
 	else
 		printf("There is no player here\n");
 
 	return FALSE;
+}
+
+gboolean
+closed_callback (GtkPopover *pop, gpointer data) {
+	printf("closed signal\n");
 }

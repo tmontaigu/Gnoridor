@@ -22,4 +22,6 @@ gboolean draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data);
 gboolean click_cell_callback (GnoridorCell *cell, gpointer data);
 gboolean closed_callback (GtkPopover *pop, gpointer data);
 
+gboolean draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data);
+
 #endif

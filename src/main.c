@@ -46,15 +46,20 @@ activate (GtkApplication *app,
 	gtk_window_set_titlebar (GTK_WINDOW (window), header_bar);
 
 
-	/* GtkWidget *draw = gtk_drawing_area_new (); */
+	 GtkWidget *board_limit = gtk_drawing_area_new ();
 	/* gtk_widget_set_size_request (draw, 640, 400); */
-	/* g_signal_connect (G_OBJECT (draw), "draw", */
-	/* 				  G_CALLBACK (draw_callback), NULL); */
+	 g_signal_connect (G_OBJECT (board_limit), "draw",
+	 				  G_CALLBACK (draw_board_limit), NULL);
 
 	board = gnoridor_board_new ();
-	gtk_container_add (GTK_CONTAINER (window), board);
 
 
+	GtkWidget *overlay = gtk_overlay_new ();
+	gtk_overlay_add_overlay (GTK_OVERLAY (overlay), board_limit);
+	gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (board));
+
+
+	gtk_container_add (GTK_CONTAINER (window), overlay);
 	gtk_widget_show_all (window);
 }
 

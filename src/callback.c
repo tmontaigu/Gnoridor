@@ -30,8 +30,6 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 	GtkAllocation *cell_allocation = g_new (GtkAllocation, 1);
 	gtk_widget_get_allocation (widget, cell_allocation);
 
-	printf("x: %d, y: %d\n", cell_allocation->width, cell_allocation->height);
-	guint width, height;
 	draw_cell(cr, cell_allocation->width, cell_allocation->height);
 	return FALSE;
 }
@@ -54,4 +52,24 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 gboolean
 closed_callback (GtkPopover *pop, gpointer data) {
 	printf("closed signal\n");
+}
+
+gboolean
+draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data) {
+	GtkAllocation *board_allocation = g_new (GtkAllocation, 1);
+	gtk_widget_get_allocation (widget, board_allocation);
+
+	cairo_set_source_rgb(cr, 0, 0, 0);
+	cairo_set_line_width(cr, 0);
+
+	int offset = 5;
+	cairo_rectangle(cr,
+					offset,
+					offset,
+					board_allocation->width - 2*offset,
+					board_allocation->height - 2*offset);
+
+	cairo_set_line_width(cr, 4);
+	cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
+	cairo_stroke(cr);
 }

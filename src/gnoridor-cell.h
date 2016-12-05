@@ -27,6 +27,7 @@ struct _GnoridorCell
  */
 GnoridorCell *gnoridor_cell_new (void);
 void          gnoridor_cell_put_player (GnoridorCell *self, GtkWidget *player);
+gboolean      cell_is_not_empty (GnoridorCell *self);
 
 G_END_DECLS
 

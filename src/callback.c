@@ -22,6 +22,19 @@ void draw_cell(cairo_t *cr, guint width, guint height)
 	cairo_stroke(cr);
 }
 
+void draw_player(cairo_t *cr, guint width, guint height) {
+	double radius = width / 8;
+	double x_center = width / 2;
+	double y_center = height / 2;
+
+	cairo_translate(cr, x_center, y_center);
+	cairo_arc(cr, 0, 0, radius, 0, 2 * 3.1415);
+	cairo_stroke_preserve(cr);
+	cairo_set_source_rgb(cr, 0.3, 0.4, 0.6);
+	cairo_fill(cr);
+}
+
+// TODO Maybe drawing squares instead of rectangle should be better
 // TODO Add drawing of player
 // TODO Add drawing of walls (maybe not so good idea)
 gboolean
@@ -31,6 +44,9 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 	gtk_widget_get_allocation (widget, cell_allocation);
 
 	draw_cell(cr, cell_allocation->width, cell_allocation->height);
+	if (cell_is_not_empty (GNORIDOR_CELL (widget)))
+		draw_player(cr, cell_allocation->width, cell_allocation->height);
+
 	return FALSE;
 }
 

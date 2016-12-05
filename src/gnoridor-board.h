@@ -26,8 +26,8 @@ struct _GnoridorBoard
 	GtkGrid parent_instance;
 
 	/* Other members, including private data. */
-	GnoridorCell *cells[81];;
-	GnoridorPlayer *player1;
+	GnoridorCell *cells[9][9];
+	GtkWidget *player1;
 	GtkWidget *player2;
 };
 

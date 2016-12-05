@@ -38,6 +38,14 @@ gnoridor_cell_put_player (GnoridorCell *self, GtkWidget *player)
 
 }
 
+gboolean
+cell_is_not_empty (GnoridorCell *self){
+	if (self->player_on_cell)
+		return TRUE;
+	return FALSE;
+}
+
+
 static void
 gnoridor_cell_dispose (GObject *gobject)
 {

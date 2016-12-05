@@ -52,8 +52,6 @@ activate (GtkApplication *app,
 	/* 				  G_CALLBACK (draw_callback), NULL); */
 
 	board = gnoridor_board_new ();
-	GtkWidget *grid = gtk_grid_new ();
-	GtkWidget *bb = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
 	gtk_container_add (GTK_CONTAINER (window), board);
 
 

@@ -26,33 +26,18 @@ gnoridor_board_init (GnoridorBoard *self)
 	gtk_grid_set_column_homogeneous (GTK_GRID (self), TRUE);
 	gtk_grid_set_row_homogeneous    (GTK_GRID (self), TRUE);
 
-    GtkWidget *buttons[81];
-
-
-	for (int i = 0; i < 81; i++)
-	{
-		//buttons[i] = gtk_button_new_with_label ("Cell");
-		self->cells[i] = gnoridor_cell_new ();
-	}
-
-
+	// Create cells and position them on the grid
 	for (int i = 0; i < 9; i++)
 	{
 		for (int j = 0; j < 9; j++)
 		{
+			self->cells[i + (j*9)] = gnoridor_cell_new ();
 			gtk_grid_attach (GTK_GRID (self),
 							 GTK_WIDGET (self->cells[i + (j * 9)]), i, j, 1,1);
 		}
 	}
 
 	self->player1 = gnoridor_player_new ();
-
-	GMenu *menu = g_menu_new ();
-	g_menu_append (menu, "Left", "app.quit");
-	g_menu_append (menu, "Right", "app.quit");
-	g_menu_append (menu, "Up", "app.quit");
-	g_menu_append (menu, "Down", "app.quit");
-
 
 	GtkBuilder *builder = gtk_builder_new_from_resource ("/org/gtk/gnoridor/resources/ui/action-popover.ui");
 	self->player2 = GTK_WIDGET (gtk_builder_get_object (builder, "player_actions"));

@@ -9,6 +9,23 @@ gnoridor_player_new (void)
 	GnoridorPlayer *self = g_object_new (GNORIDOR_TYPE_PLAYER, NULL);
 	self->builder = gtk_builder_new_from_resource ("/org/gtk/gnoridor/resources/ui/action-popover.ui");
 	self->actions = GTK_WIDGET (gtk_builder_get_object (self->builder, "player_actions"));
+
+	// Get buttons from builder
+	GtkButton *up_bt = GTK_BUTTON (gtk_builder_get_object (self->builder, "up_b"));
+	GtkButton *down_bt = GTK_BUTTON (gtk_builder_get_object (self->builder, "down_b"));
+	GtkButton *left_bt = GTK_BUTTON (gtk_builder_get_object (self->builder, "left_b"));
+	GtkButton *right_bt = GTK_BUTTON (gtk_builder_get_object (self->builder, "right_b"));
+
+	// Connect them to their respective signals
+	g_signal_connect (G_OBJECT (up_bt), "clicked",
+					  G_CALLBACK (up_button_callback), NULL);
+	g_signal_connect (G_OBJECT (down_bt), "clicked",
+				  	  G_CALLBACK (down_button_callback), NULL);
+	g_signal_connect (G_OBJECT (left_bt), "clicked",
+				      G_CALLBACK (left_button_callback), NULL);
+	g_signal_connect (G_OBJECT (right_bt), "clicked",
+				      G_CALLBACK (right_button_callback), NULL);
+
 	return self;
 }
 
@@ -74,4 +91,28 @@ gnoridor_player_class_init (GnoridorPlayerClass *klass)
 static void
 gnoridor_player_init (GnoridorPlayer *self)
 {
+}
+
+//------------------------------------------------------------------------------
+// BUTTONS CALLBACKS
+//------------------------------------------------------------------------------
+
+void
+up_button_callback (GtkWidget *button, gpointer data) {
+	printf ("Up\n");
+}
+
+void
+down_button_callback (GtkWidget *button, gpointer data) {
+	printf ("Down\n");
+}
+
+void
+left_button_callback (GtkWidget *button, gpointer data) {
+	printf ("Left\n");
+}
+
+void
+right_button_callback (GtkWidget *button, gpointer data) {
+	printf ("Right\n");
 }

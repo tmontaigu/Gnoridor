@@ -37,5 +37,11 @@ void gnoridor_player_set_color (GnoridorPlayer *self, int color );
 
 G_END_DECLS
 
+/* player mouvement buttons callback */
+void up_button_callback (GtkWidget *button, gpointer data);
+void down_button_callback (GtkWidget *button, gpointer data);
+void left_button_callback (GtkWidget *button, gpointer data);
+void right_button_callback (GtkWidget *button, gpointer data);
+
 #endif /* GNORIDOR_PLAYER_H */
 

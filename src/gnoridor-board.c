@@ -46,7 +46,6 @@ gnoridor_board_init (GnoridorBoard *self)
 	}
 
 	self->player1 = gnoridor_player_new ();
-	//self->player2 = gtk_popover_new (GTK_WIDGET (self->cells[0]));
 
 	GMenu *menu = g_menu_new ();
 	g_menu_append (menu, "Left", "app.quit");
@@ -54,19 +53,12 @@ gnoridor_board_init (GnoridorBoard *self)
 	g_menu_append (menu, "Up", "app.quit");
 	g_menu_append (menu, "Down", "app.quit");
 
-	GtkWidget *player_action = gtk_grid_new ();
-	//GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-	//GtkWidget *left_b = gtk_button_new_with_label ("Left");
-	//gtk_grid_attach (GTK_GRID (player_action), GTK_WIDGET (left_b),
-	//				 1,1,1,1);
-	//gtk_container_add (GTK_CONTAINER (box), player_action);
 
-	//GtkBuilder *builder = gtk_builder_new_from_ressource ("/home/thomas/Projects/Gnoridor/src/ressources/ui/action-popover.ui");
 	GtkBuilder *builder = gtk_builder_new_from_resource ("/org/gtk/gnoridor/resources/ui/action-popover.ui");
 	self->player2 = GTK_WIDGET (gtk_builder_get_object (builder, "player_actions"));
 	g_signal_connect (G_OBJECT (self->player2), "closed", G_CALLBACK (closed_callback), NULL);
 	gtk_popover_set_relative_to (GTK_POPOVER (self->player2), GTK_WIDGET (self->cells[0]));
-	//gtk_popover_bind_model (GTK_POPOVER (self->player2), menu, NULL);
+
 	gnoridor_cell_put_player (self->cells[0], self->player2);
 }
 

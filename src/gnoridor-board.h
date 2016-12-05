@@ -27,8 +27,8 @@ struct _GnoridorBoard
 
 	/* Other members, including private data. */
 	GnoridorCell *cells[9][9];
-	GtkWidget *player1;
-	GtkWidget *player2;
+	GnoridorPlayer *player1;
+	GnoridorPlayer *player2;
 };
 
 

@@ -11,7 +11,13 @@ gnoridor_SOURCES = main.c \
 		   gnoridor-cell.c \
 		   callback.c \
 		   gnoridor-player.c \
-		   gnoridor-resources.c
+		   gnoridor-resources.c \
+	   	   gnoridor-board.h \
+		   gnoridor-cell.h \
+		   callback.h \
+		   gnoridor-player.h
+
+
 gnoridor_CFLAGS = $(GNORIDOR_CFLAGS)
 
 gnoridor_LDADD = $(GNORIDOR_LIBS)

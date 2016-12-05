@@ -30,12 +30,11 @@ void draw_player(cairo_t *cr, guint width, guint height) {
 	cairo_translate(cr, x_center, y_center);
 	cairo_arc(cr, 0, 0, radius, 0, 2 * 3.1415);
 	cairo_stroke_preserve(cr);
-	cairo_set_source_rgb(cr, 0.3, 0.4, 0.6);
+	//cairo_set_source_rgb(cr, 0.3, 0.4, 0.6);
 	cairo_fill(cr);
 }
 
 // TODO Maybe drawing squares instead of rectangle should be better
-// TODO Add drawing of player
 // TODO Add drawing of walls (maybe not so good idea)
 gboolean
 draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
@@ -45,8 +44,11 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 
 	draw_cell(cr, cell_allocation->width, cell_allocation->height);
 	if (cell_is_not_empty (GNORIDOR_CELL (widget)))
+	{
+		gnoridor_player_color (gnoridor_cell_get_player_on_cell( GNORIDOR_CELL(widget)),
+																cr);
 		draw_player(cr, cell_allocation->width, cell_allocation->height);
-
+	}
 	return FALSE;
 }
 
@@ -56,7 +58,7 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 	if (cell->player_on_cell)
 	{
 		printf("There is a player here\n");
-		gtk_popover_popup (GTK_POPOVER (cell->player_on_cell));
+		gtk_popover_popup (GTK_POPOVER (cell->player_on_cell->actions));
 
 	}
 	else

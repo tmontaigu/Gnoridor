@@ -1,4 +1,5 @@
 #include "gnoridor-cell.h"
+/* #include "gnoridor-player.h" */
 #include "callback.h"
 
 G_DEFINE_TYPE (GnoridorCell, gnoridor_cell, GTK_TYPE_DRAWING_AREA);
@@ -32,10 +33,10 @@ gnoridor_cell_init (GnoridorCell *self)
 
 
 void
-gnoridor_cell_put_player (GnoridorCell *self, GtkWidget *player)
+gnoridor_cell_put_player (GnoridorCell *self, GnoridorPlayer *player)
 {
 	self->player_on_cell = player;
-
+	gtk_popover_set_relative_to (GTK_POPOVER (player->actions), GTK_WIDGET (self));
 }
 
 gboolean
@@ -45,6 +46,10 @@ cell_is_not_empty (GnoridorCell *self){
 	return FALSE;
 }
 
+GnoridorPlayer  *gnoridor_cell_get_player_on_cell (GnoridorCell *self) {
+	if (cell_is_not_empty (self))
+		return self->player_on_cell;
+}
 
 static void
 gnoridor_cell_dispose (GObject *gobject)

@@ -3,14 +3,17 @@
 
 #include  <gtk/gtk.h>
 
+
+
 typedef struct _playerColor {
 	double r;
 	double g;
 	double b;
 }playerColor;
 
-#define RED  0
-#define BLUE 1
+typedef enum {
+	RED, BLUE
+}Colors;
 
 
 G_BEGIN_DECLS
@@ -27,6 +30,7 @@ struct _GnoridorPlayer
 	GtkBuilder *builder;
 	GtkWidget *actions;
 	playerColor color;
+	int id;
 };
 
 
@@ -37,11 +41,7 @@ void gnoridor_player_set_color (GnoridorPlayer *self, int color );
 
 G_END_DECLS
 
-/* player mouvement buttons callback */
-void up_button_callback (GtkWidget *button, gpointer data);
-void down_button_callback (GtkWidget *button, gpointer data);
-void left_button_callback (GtkWidget *button, gpointer data);
-void right_button_callback (GtkWidget *button, gpointer data);
+
 
 #endif /* GNORIDOR_PLAYER_H */
 

@@ -27,7 +27,7 @@ activate (GtkApplication *app,
 {
 	GtkWidget *window;
 	GtkWidget *header_bar;
-	GtkWidget *board;
+	GnoridorBoard *board;
 
 
 	// Init Window
@@ -46,12 +46,13 @@ activate (GtkApplication *app,
 	gtk_window_set_titlebar (GTK_WINDOW (window), header_bar);
 
 
+	// Draw board limit
 	 GtkWidget *board_limit = gtk_drawing_area_new ();
-	/* gtk_widget_set_size_request (draw, 640, 400); */
 	 g_signal_connect (G_OBJECT (board_limit), "draw",
 	 				  G_CALLBACK (draw_board_limit), NULL);
 
 	board = gnoridor_board_new ();
+	game_board = board;
 
 
 	GtkWidget *overlay = gtk_overlay_new ();

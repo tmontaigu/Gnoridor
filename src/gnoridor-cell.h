@@ -32,6 +32,7 @@ struct _GnoridorCell
  */
 GnoridorCell *gnoridor_cell_new (void);
 void          gnoridor_cell_put_player (GnoridorCell *self, GnoridorPlayer *player);
+void          gnoridor_cell_remove_player (GnoridorCell *self);
 gboolean      cell_is_not_empty (GnoridorCell *self);
 GnoridorPlayer *gnoridor_cell_get_player_on_cell (GnoridorCell *self);
 

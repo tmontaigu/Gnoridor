@@ -1,5 +1,4 @@
 #include "gnoridor-board.h"
-/* #include "gnoridor-cell.h" */
 #include "gnoridor-player.h"
 #include "callback.h"
 
@@ -7,7 +6,7 @@ G_DEFINE_TYPE (GnoridorBoard, gnoridor_board, GTK_TYPE_GRID);
 
 
 
-GtkWidget *
+GnoridorBoard *
 gnoridor_board_new (void)
 {
 	return g_object_new (GNORIDOR_TYPE_BOARD, NULL);
@@ -43,13 +42,13 @@ gnoridor_board_init (GnoridorBoard *self)
 		}
 	}
 
-
+	self->player2 = gnoridor_player_new_with_color (BLUE);
+	gnoridor_cell_put_player (self->cells[4][8], self->player2);
+	self->player2_cell = self->cells[4][8];
 
 	self->player1 = gnoridor_player_new_with_color (RED);
 	gnoridor_cell_put_player (self->cells[4][0], self->player1);
-
-	self->player2 = gnoridor_player_new_with_color (BLUE);
-	gnoridor_cell_put_player (self->cells[4][8], self->player2);
+	self->player1_cell = self->cells[4][0];
 }
 
 
@@ -63,4 +62,36 @@ static void
 gnoridor_cell_finalize (GObject *gobject)
 {
   G_OBJECT_CLASS (gnoridor_board_parent_class)->finalize (gobject);
+}
+
+gboolean
+gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int direction)
+{
+	printf("Player \"%d\" requested move : %d\n", player->id, direction);
+	printf("Size%d\n", sizeof(Colors));
+
+	if (player->id == RED)
+	{
+		if (direction == Down)
+		{
+			GnoridorCell *old_cell = self->player1_cell;
+			GnoridorCell *new_cell = self->cells[old_cell->row][old_cell->col+1];
+			gnoridor_cell_remove_player (old_cell);
+			gnoridor_cell_put_player (new_cell, player);
+			self->player1_cell = new_cell;
+		}
+	}
+
+	if (player->id == BLUE)
+	{
+		if (direction == Left)
+		{
+			GnoridorCell *old_cell = self->player2_cell;
+			GnoridorCell *new_cell = self->cells[old_cell->row-1][old_cell->col];
+			gnoridor_cell_remove_player (old_cell);
+			gnoridor_cell_put_player (new_cell, player);
+			self->player2_cell = new_cell;
+		}
+	}
+
 }

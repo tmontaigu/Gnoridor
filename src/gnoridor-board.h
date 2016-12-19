@@ -29,6 +29,9 @@ struct _GnoridorBoard
 	GnoridorCell *cells[9][9];
 	GnoridorPlayer *player1;
 	GnoridorPlayer *player2;
+
+	GnoridorCell *player1_cell;
+	GnoridorCell *player2_cell;
 };
 
 
@@ -36,9 +39,8 @@ struct _GnoridorBoard
  * Method definitions.
  */
 
-
-GtkWidget *gnoridor_board_new (void);
-void       gnoridor_board_set_player_cell (int player, int col, int row);
+GnoridorBoard *gnoridor_board_new (void);
+gboolean   gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int direction);
 
 G_END_DECLS
 

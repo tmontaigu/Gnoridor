@@ -38,11 +38,16 @@ gnoridor_cell_put_player (GnoridorCell *self, GnoridorPlayer *player)
 	self->player_on_cell = player;
 	gtk_popover_set_relative_to (GTK_POPOVER (player->actions), GTK_WIDGET (self));
 }
+void
+gnoridor_cell_remove_player (GnoridorCell *self)
+{
+	self->player_on_cell = NULL;
+}
 
 gboolean
 cell_is_not_empty (GnoridorCell *self){
 	if (self->player_on_cell)
-		return TRUE;
+		 return TRUE;
 	return FALSE;
 }
 

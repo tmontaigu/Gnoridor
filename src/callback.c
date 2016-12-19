@@ -2,6 +2,9 @@
 
 #include "callback.h"
 #include "gnoridor-cell.h"
+#include "gnoridor-player.h"
+#include "gnoridor-board.h"
+
 
 
 void draw_cell(cairo_t *cr, guint width, guint height)
@@ -13,9 +16,9 @@ void draw_cell(cairo_t *cr, guint width, guint height)
 	cairo_set_line_width(cr, 4.5);
 
 	cairo_rectangle(cr, x_center - width / 4,
-					y_center - height / 4,
-					width / 2 ,
-					height / 2);
+									y_center - height / 4,
+									width / 2 ,
+									height / 2);
 
 	cairo_set_line_width(cr, 4);
 	cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -45,7 +48,7 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 	if (cell_is_not_empty (GNORIDOR_CELL (widget)))
 	{
 		gnoridor_player_color (gnoridor_cell_get_player_on_cell( GNORIDOR_CELL(widget)),
-																cr);
+													 cr);
 		draw_player(cr, cell_allocation->width, cell_allocation->height);
 	}
 	return FALSE;
@@ -82,4 +85,32 @@ draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data) {
 	cairo_set_line_width(cr, 4);
 	cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
 	cairo_stroke(cr);
+}
+
+//------------------------------------------------------------------------------
+// BUTTONS CALLBACKS
+//------------------------------------------------------------------------------
+
+void
+up_button_callback (GtkWidget *button, gpointer data) {
+	GnoridorPlayer *player = data;
+	gnoridor_board_request_move(game_board, player, Up);
+}
+
+void
+down_button_callback (GtkWidget *button, gpointer data) {
+	GnoridorPlayer *player = data;
+	gnoridor_board_request_move(game_board, player, Down);
+}
+
+void
+left_button_callback (GtkWidget *button, gpointer data) {
+	GnoridorPlayer *player = data;
+	gnoridor_board_request_move(game_board, player, Left);
+}
+
+void
+right_button_callback (GtkWidget *button, gpointer data) {
+	GnoridorPlayer *player = data;
+	gnoridor_board_request_move(game_board, player, Right);
 }

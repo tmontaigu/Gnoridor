@@ -1,5 +1,6 @@
 #include "gnoridor-player.h"
 #include "gnoridor-cell.h"
+#include "callback.h"
 
 G_DEFINE_TYPE (GnoridorPlayer, gnoridor_player, GTK_TYPE_WIDGET)
 
@@ -18,13 +19,13 @@ gnoridor_player_new (void)
 
 	// Connect them to their respective signals
 	g_signal_connect (G_OBJECT (up_bt), "clicked",
-					  G_CALLBACK (up_button_callback), NULL);
+					  G_CALLBACK (up_button_callback), self);
 	g_signal_connect (G_OBJECT (down_bt), "clicked",
-				  	  G_CALLBACK (down_button_callback), NULL);
+				  	  G_CALLBACK (down_button_callback), self);
 	g_signal_connect (G_OBJECT (left_bt), "clicked",
-				      G_CALLBACK (left_button_callback), NULL);
+				      G_CALLBACK (left_button_callback), self);
 	g_signal_connect (G_OBJECT (right_bt), "clicked",
-				      G_CALLBACK (right_button_callback), NULL);
+				      G_CALLBACK (right_button_callback), self);
 
 	return self;
 }
@@ -70,6 +71,7 @@ gnoridor_player_set_color (GnoridorPlayer *self, int color) {
 	 	self->color.g = 0.0;
 		self->color.b = 0.0;
 	}
+	self->id = color;
 }
 
 static void
@@ -93,26 +95,4 @@ gnoridor_player_init (GnoridorPlayer *self)
 {
 }
 
-//------------------------------------------------------------------------------
-// BUTTONS CALLBACKS
-//------------------------------------------------------------------------------
 
-void
-up_button_callback (GtkWidget *button, gpointer data) {
-	printf ("Up\n");
-}
-
-void
-down_button_callback (GtkWidget *button, gpointer data) {
-	printf ("Down\n");
-}
-
-void
-left_button_callback (GtkWidget *button, gpointer data) {
-	printf ("Left\n");
-}
-
-void
-right_button_callback (GtkWidget *button, gpointer data) {
-	printf ("Right\n");
-}

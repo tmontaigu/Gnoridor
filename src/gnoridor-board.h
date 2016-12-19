@@ -30,6 +30,10 @@ struct _GnoridorBoard
 	GnoridorPlayer *player1;
 	GnoridorPlayer *player2;
 
+	int number_of_player;
+	GnoridorPlayer **player;
+	GnoridorCell **player_cell;
+
 	GnoridorCell *player1_cell;
 	GnoridorCell *player2_cell;
 };

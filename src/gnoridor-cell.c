@@ -1,5 +1,4 @@
 #include "gnoridor-cell.h"
-/* #include "gnoridor-player.h" */
 #include "callback.h"
 
 G_DEFINE_TYPE (GnoridorCell, gnoridor_cell, GTK_TYPE_DRAWING_AREA);
@@ -67,3 +66,4 @@ gnoridor_cell_finalize (GObject *gobject)
 {
   G_OBJECT_CLASS (gnoridor_cell_parent_class)->finalize (gobject);
 }
+

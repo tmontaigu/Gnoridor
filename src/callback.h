@@ -6,12 +6,7 @@
 #include "gnoridor-cell.h"
 #include "gnoridor-player.h"
 #include "gnoridor-board.h"
-
-
-typedef enum {
-	Up, Down, Left, Right
-}Direction;
-
+#include "gnoridor-define.h"
 
 GnoridorBoard *game_board;
 /*

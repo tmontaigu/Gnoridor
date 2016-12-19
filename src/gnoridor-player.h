@@ -11,6 +11,8 @@ typedef struct _playerColor {
 	double b;
 }playerColor;
 
+
+#define NUM_COLORS
 typedef enum {
 	RED, BLUE
 }Colors;

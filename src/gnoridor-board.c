@@ -40,17 +40,10 @@ gnoridor_board_init (GnoridorBoard *self)
 			self->cells[i][j]->col = j;
 
 			gtk_grid_attach (GTK_GRID (self),
-							 GTK_WIDGET (self->cells[i][j]), i, j, 1,1);
+							 GTK_WIDGET (self->cells[i][j]), j, i, 1,1);
 		}
 	}
 
-	//self->player2 = gnoridor_player_new_with_color (BLUE);
-	//gnoridor_cell_put_player (self->cells[4][8], self->player2);
-	//self->player2_cell = self->cells[4][8];
-
-	//self->player1 = gnoridor_player_new_with_color (RED);
-	//gnoridor_cell_put_player (self->cells[4][0], self->player1);
-	//self->player1_cell = self->cells[4][0];
 
 	self->number_of_player = 2;
 	self->player = malloc (sizeof * self->player * self->number_of_player);
@@ -58,13 +51,13 @@ gnoridor_board_init (GnoridorBoard *self)
 
 
 	GnoridorPlayer *p = gnoridor_player_new_with_color (BLUE);
-	gnoridor_cell_put_player (self->cells[4][8], p);
-	self->player_cell[0] = self->cells[4][8];
+	gnoridor_cell_put_player (self->cells[0][4], p);
+	self->player_cell[0] = self->cells[0][4];
 	self->player[0] = p;
 
 	p = gnoridor_player_new_with_color (RED);
-	gnoridor_cell_put_player (self->cells[4][0], p);
-	self->player_cell[1] = self->cells[4][0];
+	gnoridor_cell_put_player (self->cells[8][4], p);
+	self->player_cell[1] = self->cells[8][4];
 	self->player[1] = p;
 
 
@@ -119,22 +112,32 @@ gnoridor_board_check_move_validity (GnoridorBoard *self, GnoridorCell *old_cell,
 
 	switch (direction) {
 	case Up:
-		if (old_cell->col > 0)
-			new_cell = self->cells[old_cell->row][old_cell->col-1];
+		if (old_cell->row-1 < 0)
+			return NULL;
+		new_cell = self->cells[old_cell->row-1][old_cell->col];
 		break;
 	case Down:
-		if (old_cell->col < 9)
-			new_cell = self->cells[old_cell->row][old_cell->col+1];
+		if ( old_cell->row+1 > 9)
+			return NULL;
+		new_cell = self->cells[old_cell->row+1][old_cell->col];
 		break;
 	case Left:
-		if (old_cell->row > 0)
-			new_cell = self->cells[old_cell->row-1][old_cell->col];
+		if (old_cell->col-1 < 0)
+			return NULL;
+		new_cell = self->cells[old_cell->row][old_cell->col-1];
 		break;
 	case Right:
-		if (old_cell->row < 9)
-			new_cell = self->cells[old_cell->row+1][old_cell->col];
+		if (old_cell->col+1 >= 9)
+			return NULL;
+		new_cell = self->cells[old_cell->row][old_cell->col+1];
 		break;
 	}
+
+	if (gnoridor_cell_is_not_empty (new_cell))
+		new_cell = NULL;
+
+
+
 	return new_cell;
 }
 
@@ -142,7 +145,6 @@ gnoridor_board_check_move_validity (GnoridorBoard *self, GnoridorCell *old_cell,
 gboolean
 gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int direction)
 {
-	printf("Player \"%d\" requested move : %d\n", player->id, direction);
 
 	GnoridorCell *old_cell = gnoridor_board_get_player_cell (self, player->id);
 	GnoridorCell *new_cell = gnoridor_board_check_move_validity (self,
@@ -155,8 +157,7 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 		return FALSE;
 	}
 
-	printf("old_cell: [%d][%d]\n", old_cell->row, old_cell->col);
-	printf("new_cell: [%d][%d]\n", new_cell->row, new_cell->col);
+
 	gnoridor_cell_remove_player (old_cell);
 	gnoridor_cell_put_player (new_cell, player);
 	gnoridor_board_set_player_cell(self, player->id, new_cell);

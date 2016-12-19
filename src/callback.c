@@ -45,7 +45,7 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 	gtk_widget_get_allocation (widget, cell_allocation);
 
 	draw_cell(cr, cell_allocation->width, cell_allocation->height);
-	if (cell_is_not_empty (GNORIDOR_CELL (widget)))
+	if (gnoridor_cell_is_not_empty (GNORIDOR_CELL (widget)))
 	{
 		gnoridor_player_color (gnoridor_cell_get_player_on_cell( GNORIDOR_CELL(widget)),
 													 cr);

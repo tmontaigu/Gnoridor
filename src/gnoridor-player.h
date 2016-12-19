@@ -5,6 +5,7 @@
 
 
 
+
 typedef struct _playerColor {
 	double r;
 	double g;

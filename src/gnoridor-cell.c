@@ -1,5 +1,6 @@
 #include "gnoridor-cell.h"
 #include "callback.h"
+#include "gnoridor-define.h"
 
 G_DEFINE_TYPE (GnoridorCell, gnoridor_cell, GTK_TYPE_DRAWING_AREA);
 
@@ -50,9 +51,47 @@ gnoridor_cell_is_not_empty (GnoridorCell *self){
 	return FALSE;
 }
 
-GnoridorPlayer  *gnoridor_cell_get_player_on_cell (GnoridorCell *self) {
+GnoridorPlayer  *
+gnoridor_cell_get_player_on_cell (GnoridorCell *self) {
 	if (gnoridor_cell_is_not_empty (self))
 		return self->player_on_cell;
+}
+
+gboolean
+gnoridor_cell_is_border (GnoridorCell *self)
+{
+	if ( (self->row > 0 && self->row < 8) && (self->col > 0 && self->col < 8) )
+		return FALSE;
+	return TRUE;
+}
+
+//TODO should probably be done with flags
+int
+gnoridor_cell_get_border_type (GnoridorCell *self)
+{
+	if (self->row == 0)
+	{
+		if (self->col == 0)
+			return Up_left_corner;
+		if (self->col == 8)
+			return Up_right_corner;
+		return Up_border;
+	}
+
+	if (self->row == 8)
+	{
+		if (self->col == 0)
+			return Bottom_left_corner;
+		if (self->col == 8)
+			return Bottom_right_corner;
+		return Bottom_border;
+	}
+	if (self->col == 0)
+		return Left_border;
+	if (self->col == 8)
+		return Right_border;
+
+	return Not_border;
 }
 
 static void

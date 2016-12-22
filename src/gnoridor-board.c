@@ -3,6 +3,7 @@
 #include "callback.h"
 
 #include <stdlib.h>
+#include <gtk/gtk.h>
 
 G_DEFINE_TYPE (GnoridorBoard, gnoridor_board, GTK_TYPE_GRID);
 
@@ -141,6 +142,24 @@ gnoridor_board_check_move_validity (GnoridorBoard *self, GnoridorCell *old_cell,
 	return new_cell;
 }
 
+static gboolean
+gnoridor_board_check_win (GnoridorBoard *self, GnoridorPlayer *player)
+{
+	GnoridorCell *cell = gnoridor_board_get_player_cell (self, player->id);
+	int border_type = gnoridor_cell_get_border_type (cell);
+
+	if (player->id == RED &&  border_type == Up_border)
+	{
+		printf("GG player %d\n", player->id);
+		return TRUE;
+	}
+	if (player->id == BLUE && border_type == Bottom_border)
+	{
+		printf("GG player %d\n", player->id);
+		return TRUE;
+	}
+	return FALSE;
+}
 
 gboolean
 gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int direction)
@@ -161,5 +180,33 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 	gnoridor_cell_remove_player (old_cell);
 	gnoridor_cell_put_player (new_cell, player);
 	gnoridor_board_set_player_cell(self, player->id, new_cell);
+	//gtk_popover_popdown (GTK_POPOVER (player->actions));
+	gboolean player_wins = gnoridor_board_check_win (self, player);
+	if (player_wins) //show popup window
+	{
+		GtkWidget *dialog;
+		char title[20];
+		sprintf(title, "Player %d wins", player->id+1);
+
+		int flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
+		dialog = gtk_dialog_new_with_buttons ((gchar*) title,
+	                                      GTK_WINDOW (self->window),
+  	                                    flags,
+  	                                    "_OK",
+  	                                    GTK_RESPONSE_ACCEPT,
+  	                                    "_Cancel",
+  	                                    GTK_RESPONSE_REJECT,
+  	                                    NULL);
+	gint response = gtk_dialog_run (GTK_DIALOG (dialog));
+	printf ("response : %d\n",response);
+	gtk_widget_hide (dialog);
+	}
 	return TRUE;
+}
+
+
+void
+gnoridor_board_set_window (GnoridorBoard *self, GtkWidget *window)
+{
+	self->window = window;
 }

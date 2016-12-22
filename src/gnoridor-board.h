@@ -27,12 +27,11 @@ struct _GnoridorBoard
 
 	/* Other members, including private data. */
 	GnoridorCell *cells[9][9];
-	GnoridorPlayer *player1;
-	GnoridorPlayer *player2;
-
 	int number_of_player;
 	GnoridorPlayer **player;
 	GnoridorCell **player_cell;
+
+	GtkWidget *window;
 };
 
 
@@ -41,7 +40,8 @@ struct _GnoridorBoard
  */
 
 GnoridorBoard *gnoridor_board_new (void);
-gboolean   gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int direction);
+gboolean       gnoridor_board_request_move (GnoridorBoard *self, GnoridorPlayer *player, int direction);
+void           gnoridor_board_set_window (GnoridorBoard *self, GtkWidget *window);
 
 G_END_DECLS
 

@@ -52,6 +52,7 @@ activate (GtkApplication *app,
 	 				  G_CALLBACK (draw_board_limit), NULL);
 
 	board = gnoridor_board_new ();
+	gnoridor_board_set_window (board, window);
 	game_board = board;
 
 
@@ -60,8 +61,16 @@ activate (GtkApplication *app,
 	gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (board));
 
 
-	gtk_container_add (GTK_CONTAINER (window), overlay);
+	GtkWidget *game_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+	GtkWidget *button = gtk_button_new_with_label ("mdr");
+
+	gtk_box_pack_start (GTK_BOX (game_box), overlay, TRUE, TRUE, 5);
+	gtk_box_pack_start (GTK_BOX (game_box), button, FALSE, FALSE, 50);
+
+	gtk_container_add (GTK_CONTAINER (window), game_box);
 	gtk_widget_show_all (window);
+
+
 }
 
 int main(int   argc,

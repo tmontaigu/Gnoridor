@@ -22,7 +22,6 @@ gnoridor_cell_class_init (GnoridorCellClass*class)
 static void
 gnoridor_cell_init (GnoridorCell *self)
 {
-	//printf("gnoridor_cell_init\n");
 	gtk_widget_add_events (GTK_WIDGET (self), GDK_BUTTON_PRESS_MASK);
 	self->player_on_cell = NULL;
 	g_signal_connect (G_OBJECT   (self), "draw",

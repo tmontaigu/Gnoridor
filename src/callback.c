@@ -74,7 +74,7 @@ void draw_cell(cairo_t *cr, guint width, guint height, guint size)
 }
 
 void draw_player(cairo_t *cr, guint width, guint height, guint size) {
-	double radius = size / 16;
+	double radius = size / 8;
 	double x_center = width / 2;
 	double y_center = height / 2;
 
@@ -169,3 +169,4 @@ right_button_callback (GtkWidget *button, gpointer data) {
 	GnoridorPlayer *player = data;
 	gnoridor_board_request_move(game_board, player, Right);
 }
+

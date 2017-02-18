@@ -29,6 +29,7 @@ struct _GnoridorBoard
 	GnoridorCell *cells[9][9];
 	int number_of_player;
 	GnoridorPlayer **player;
+	GnoridorPlayer *current_player;
 	GnoridorCell **player_cell;
 
 	GtkWidget *window;

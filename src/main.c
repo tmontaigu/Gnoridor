@@ -53,7 +53,7 @@ activate (GtkApplication *app,
 
 	board = gnoridor_board_new ();
 	gnoridor_board_set_window (board, window);
-	game_board = board;
+	game_board = board; // Set the global variable
 
 
 	GtkWidget *overlay = gtk_overlay_new ();
@@ -62,10 +62,19 @@ activate (GtkApplication *app,
 
 
 	GtkWidget *game_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+	GtkWidget  *label = gtk_label_new ("Current player :");
 	GtkWidget *button = gtk_button_new_with_label ("mdr");
+	GtkWidget *button2 = gtk_button_new_with_label ("mdr2");
+
+	GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
+	gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
+	gtk_container_add (GTK_CONTAINER (box), label);
+	gtk_container_add (GTK_CONTAINER (box), button);
+	gtk_container_add (GTK_CONTAINER (box), button2);
+
 
 	gtk_box_pack_start (GTK_BOX (game_box), overlay, TRUE, TRUE, 5);
-	gtk_box_pack_start (GTK_BOX (game_box), button, FALSE, FALSE, 50);
+	gtk_box_pack_start (GTK_BOX (game_box), box, FALSE, FALSE, 5);
 
 	gtk_container_add (GTK_CONTAINER (window), game_box);
 	gtk_widget_show_all (window);

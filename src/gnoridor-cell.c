@@ -94,16 +94,3 @@ gnoridor_cell_get_border_type (GnoridorCell *self)
 
 	return Not_border;
 }
-
-static void
-gnoridor_cell_dispose (GObject *gobject)
-{
-  G_OBJECT_CLASS (gnoridor_cell_parent_class)->dispose (gobject);
-}
-
-static void
-gnoridor_cell_finalize (GObject *gobject)
-{
-  G_OBJECT_CLASS (gnoridor_cell_parent_class)->finalize (gobject);
-}
-

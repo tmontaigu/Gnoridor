@@ -77,8 +77,6 @@ gnoridor_player_set_color (GnoridorPlayer *self, int color) {
 static void
 gnoridor_player_finalize (GObject *object)
 {
-	GnoridorPlayer *self = (GnoridorPlayer *)object;
-
 	G_OBJECT_CLASS (gnoridor_player_parent_class)->finalize (object);
 }
 

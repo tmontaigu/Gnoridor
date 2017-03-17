@@ -62,28 +62,15 @@ gnoridor_board_init (GnoridorBoard *self)
 
 }
 
-
-static void
-gnoridor_board_dispose (GObject *gobject)
-{
-  G_OBJECT_CLASS (gnoridor_board_parent_class)->dispose (gobject);
-}
-
-static void
-gnoridor_cell_finalize (GObject *gobject)
-{
-  G_OBJECT_CLASS (gnoridor_board_parent_class)->finalize (gobject);
-}
-
-static GnoridorPlayer*
-gnoridor_board_get_player(GnoridorBoard *self, int color_id)
-{
-	for (int i = 0; i < self->number_of_player; i++) {
-		if (self->player[i]->id == color_id)
-			return self->player[i];
-	}
-	return NULL;
-}
+// static GnoridorPlayer*
+// gnoridor_board_get_player(GnoridorBoard *self, int color_id)
+// {
+// 	for (int i = 0; i < self->number_of_player; i++) {
+// 		if (self->player[i]->id == color_id)
+// 			return self->player[i];
+// 	}
+// 	return NULL;
+// }
 
 static GnoridorCell*
 gnoridor_board_get_player_cell(GnoridorBoard *self, int color_id)

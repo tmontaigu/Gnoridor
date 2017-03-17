@@ -25,8 +25,6 @@ gnoridor_board_class_init (GnoridorBoardClass *class)
 static void
 gnoridor_board_init (GnoridorBoard *self)
 {
-	GtkBuilder *builder = gtk_builder_new_from_resource ("/org/gtk/gnoridor/resources/ui/action-popover.ui");
-	GtkBuilder *builder2 = gtk_builder_new_from_resource ("/org/gtk/gnoridor/resources/ui/action-popover.ui");
 
 	gtk_grid_set_column_homogeneous (GTK_GRID (self), TRUE);
 	gtk_grid_set_row_homogeneous    (GTK_GRID (self), TRUE);
@@ -84,6 +82,7 @@ gnoridor_board_get_player(GnoridorBoard *self, int color_id)
 		if (self->player[i]->id == color_id)
 			return self->player[i];
 	}
+	return NULL;
 }
 
 static GnoridorCell*
@@ -93,6 +92,7 @@ gnoridor_board_get_player_cell(GnoridorBoard *self, int color_id)
 		if (self->player[i]->id == color_id)
 			return self->player_cell[i];
 	}
+	return NULL;
 }
 
 static void

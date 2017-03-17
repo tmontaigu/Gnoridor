@@ -8,7 +8,7 @@ GnoridorPlayer *
 gnoridor_player_new (void)
 {
 	GnoridorPlayer *self = g_object_new (GNORIDOR_TYPE_PLAYER, NULL);
-	self->builder = gtk_builder_new_from_resource ("/org/gtk/gnoridor/resources/ui/action-popover.ui");
+	self->builder = gtk_builder_new_from_resource ("/org/gtk/gnoridor/src/resources/ui/action-popover.ui");
 	self->actions = GTK_WIDGET (gtk_builder_get_object (self->builder, "player_actions"));
 
 	// Get buttons from builder

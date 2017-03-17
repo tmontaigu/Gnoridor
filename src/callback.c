@@ -120,6 +120,7 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 gboolean
 closed_callback (GtkPopover *pop, gpointer data) {
 	printf("closed signal\n");
+	return FALSE;
 }
 
 gboolean
@@ -140,6 +141,7 @@ draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data) {
 	cairo_set_line_width(cr, 4);
 	cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
 	cairo_stroke(cr);
+	return TRUE;
 }
 
 //------------------------------------------------------------------------------

@@ -49,6 +49,7 @@ gnoridor_board_init (GnoridorBoard *self)
 	self->player_cell = malloc (sizeof * self->player_cell * self->number_of_player);
 
 
+        // Create 2 players
 	GnoridorPlayer *p = gnoridor_player_new_with_color (BLUE);
 	gnoridor_cell_put_player (self->cells[0][4], p);
 	self->player_cell[0] = self->cells[0][4];
@@ -59,7 +60,9 @@ gnoridor_board_init (GnoridorBoard *self)
 	self->player_cell[1] = self->cells[8][4];
 	self->player[1] = p;
 
-
+        // Player 0 is the first one to start
+	self->current_player = self->player[0];
+        self->current_player_index = 0;
 }
 
 // static GnoridorPlayer*
@@ -87,14 +90,14 @@ gnoridor_board_set_player_cell(GnoridorBoard *self, int color_id, GnoridorCell *
 {
 	for (int i = 0; i < self->number_of_player; i++) {
 		if (self->player[i]->id == color_id)
-			self->player_cell[i] = new_cell;
+                    self->player_cell[i] = new_cell;
 	}
 }
 
 
 static GnoridorCell *
 gnoridor_board_check_move_validity (GnoridorBoard *self, GnoridorCell *old_cell,
-																		int direction)
+                                    int direction)
 {
 	GnoridorCell *new_cell = NULL;
 
@@ -169,7 +172,7 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 	gnoridor_board_set_player_cell(self, player->id, new_cell);
 	//gtk_popover_popdown (GTK_POPOVER (player->actions));
 	gboolean player_wins = gnoridor_board_check_win (self, player);
-	if (player_wins) //show popup window
+	if (player_wins) // show popup window
 	{
 		GtkWidget *dialog;
 		char title[20];
@@ -177,18 +180,23 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 
 		int flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
 		dialog = gtk_dialog_new_with_buttons ((gchar*) title,
-	                                      GTK_WINDOW (self->window),
+	                                    GTK_WINDOW (self->window),
   	                                    flags,
   	                                    "_OK",
   	                                    GTK_RESPONSE_ACCEPT,
   	                                    "_Cancel",
   	                                    GTK_RESPONSE_REJECT,
   	                                    NULL);
-	gint response = gtk_dialog_run (GTK_DIALOG (dialog));
-	printf ("response : %d\n",response);
-	gtk_widget_hide (dialog);
+            gint response = gtk_dialog_run (GTK_DIALOG (dialog));
+            printf ("response : %d\n",response);
+            gtk_widget_hide (dialog);
 	}
 	return TRUE;
+}
+
+void gnoridor_board_change_current_player(GnoridorBoard* self) {
+    self->current_player_index = (self->current_player_index + 1) % self->number_of_player;
+    self->current_player = self->player[self->current_player_index];
 }
 
 

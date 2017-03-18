@@ -46,30 +46,30 @@ gnoridor_player_move_to (GnoridorPlayer *self, GnoridorCell *cell)
 void
 gnoridor_player_color (GnoridorPlayer *self, cairo_t *cr) {
 	cairo_set_source_rgb (cr,
-						  self->color.r,
-						  self->color.g,
-						  self->color.b);
+                              self->color.r,
+                              self->color.g,
+                              self->color.b);
 }
 
 void
 gnoridor_player_set_color (GnoridorPlayer *self, int color) {
 	if (color == BLUE)
 	{
-		self->color.r = 0.3;
-	 	self->color.g = 0.4;
-		self->color.b = 0.6;
+            self->color.r = 0.3;
+            self->color.g = 0.4;
+            self->color.b = 0.6;
 	}
 	else if (color == RED)
 	{
-		self->color.r = 1.0;
-	 	self->color.g = 0.0;
-		self->color.b = 0.0;
+            self->color.r = 1.0;
+            self->color.g = 0.0;
+            self->color.b = 0.0;
 	}
 	else
 	{
-		self->color.r = 0.0;
-	 	self->color.g = 0.0;
-		self->color.b = 0.0;
+            self->color.r = 0.0;
+            self->color.g = 0.0;
+            self->color.b = 0.0;
 	}
 	self->id = color;
 }

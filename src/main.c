@@ -47,8 +47,8 @@ activate (GtkApplication *app,
 
 
 	// Draw board limit
-	 GtkWidget *board_limit = gtk_drawing_area_new ();
-	 g_signal_connect (G_OBJECT (board_limit), "draw",
+	GtkWidget *board_limit = gtk_drawing_area_new ();
+	g_signal_connect (G_OBJECT (board_limit), "draw",
 	 				  G_CALLBACK (draw_board_limit), NULL);
 
 	board = gnoridor_board_new ();
@@ -63,6 +63,7 @@ activate (GtkApplication *app,
 
 	GtkWidget *game_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	GtkWidget  *label = gtk_label_new ("Current player :");
+
 	GtkWidget *button = gtk_button_new_with_label ("mdr");
 	GtkWidget *button2 = gtk_button_new_with_label ("mdr2");
 
@@ -78,8 +79,6 @@ activate (GtkApplication *app,
 
 	gtk_container_add (GTK_CONTAINER (window), game_box);
 	gtk_widget_show_all (window);
-
-
 }
 
 int main(int   argc,

@@ -112,8 +112,8 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 gboolean
 click_cell_callback (GnoridorCell *cell, gpointer data) {
 
-	if (cell->player_on_cell)
-		gtk_popover_popup (GTK_POPOVER (cell->player_on_cell->actions));
+	if (cell->player_on_cell && game_board->current_player == cell->player_on_cell)
+            gtk_popover_popup (GTK_POPOVER (cell->player_on_cell->actions));
 	return FALSE;
 }
 
@@ -133,10 +133,10 @@ draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data) {
 
 	int offset = 5;
 	cairo_rectangle(cr,
-									offset,
-									offset,
-									board_allocation->width - 2*offset,
-									board_allocation->height - 2*offset);
+                        offset,
+                        offset,
+                        board_allocation->width - 2*offset,
+                        board_allocation->height - 2*offset);
 
 	cairo_set_line_width(cr, 4);
 	cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -148,27 +148,41 @@ draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data) {
 // BUTTONS CALLBACKS
 //------------------------------------------------------------------------------
 
+// TODO close popover when player moved succesfully
+
 void
 up_button_callback (GtkWidget *button, gpointer data) {
 	GnoridorPlayer *player = data;
-	gnoridor_board_request_move(game_board, player, Up);
+	int succesful = gnoridor_board_request_move(game_board, player, Up);
+        if (succesful) {
+            gnoridor_board_change_current_player(game_board);
+        }
 }
 
 void
 down_button_callback (GtkWidget *button, gpointer data) {
 	GnoridorPlayer *player = data;
-	gnoridor_board_request_move(game_board, player, Down);
+	int succesful = gnoridor_board_request_move(game_board, player, Down);
+        if (succesful) {
+            gnoridor_board_change_current_player(game_board);
+        }
 }
 
 void
 left_button_callback (GtkWidget *button, gpointer data) {
 	GnoridorPlayer *player = data;
-	gnoridor_board_request_move(game_board, player, Left);
+	int succesful = gnoridor_board_request_move(game_board, player, Left);
+        if (succesful) {
+            gnoridor_board_change_current_player(game_board);
+        }
 }
 
 void
 right_button_callback (GtkWidget *button, gpointer data) {
 	GnoridorPlayer *player = data;
-	gnoridor_board_request_move(game_board, player, Right);
+	int succesful = gnoridor_board_request_move(game_board, player, Right);
+        if (succesful) {
+            gnoridor_board_change_current_player(game_board);
+        }
 }
 

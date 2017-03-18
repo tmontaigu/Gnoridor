@@ -29,6 +29,7 @@ struct _GnoridorBoard
 	GnoridorCell *cells[9][9];
 	int number_of_player;
 	GnoridorPlayer **player;
+        int current_player_index;
 	GnoridorPlayer *current_player;
 	GnoridorCell **player_cell;
 
@@ -43,6 +44,7 @@ struct _GnoridorBoard
 GnoridorBoard *gnoridor_board_new (void);
 gboolean       gnoridor_board_request_move (GnoridorBoard *self, GnoridorPlayer *player, int direction);
 void           gnoridor_board_set_window (GnoridorBoard *self, GtkWidget *window);
+void           gnoridor_board_change_current_player(GnoridorBoard *self);
 
 G_END_DECLS
 

@@ -156,6 +156,7 @@ up_button_callback (GtkWidget *button, gpointer data) {
 	int succesful = gnoridor_board_request_move(game_board, player, Up);
         if (succesful) {
             gnoridor_board_change_current_player(game_board);
+            gtk_popover_popdown (GTK_POPOVER (player->actions));
         }
 }
 
@@ -165,6 +166,7 @@ down_button_callback (GtkWidget *button, gpointer data) {
 	int succesful = gnoridor_board_request_move(game_board, player, Down);
         if (succesful) {
             gnoridor_board_change_current_player(game_board);
+            gtk_popover_popdown (GTK_POPOVER (player->actions));
         }
 }
 
@@ -174,6 +176,7 @@ left_button_callback (GtkWidget *button, gpointer data) {
 	int succesful = gnoridor_board_request_move(game_board, player, Left);
         if (succesful) {
             gnoridor_board_change_current_player(game_board);
+            gtk_popover_popdown (GTK_POPOVER (player->actions));
         }
 }
 
@@ -183,6 +186,8 @@ right_button_callback (GtkWidget *button, gpointer data) {
 	int succesful = gnoridor_board_request_move(game_board, player, Right);
         if (succesful) {
             gnoridor_board_change_current_player(game_board);
+            gtk_popover_popdown (GTK_POPOVER (player->actions));
+            
         }
 }
 

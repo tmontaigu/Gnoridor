@@ -162,10 +162,17 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 
 
 	if (new_cell == NULL) {
-		printf("invalid move\n");
-		return FALSE;
+            printf("invalid move\n");
+            return FALSE;
 	}
 
+        if (self->current_player != player)
+        {
+            printf("Not players turn\n");
+            // To make sure the AI won't be able to move multiple times
+            gtk_popover_popdown( GTK_POPOVER (player->actions));
+            return FALSE;
+        }
 
 	gnoridor_cell_remove_player (old_cell);
 	gnoridor_cell_put_player (new_cell, player);

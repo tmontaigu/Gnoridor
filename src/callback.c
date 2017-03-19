@@ -40,7 +40,7 @@ void draw_vertical_wall(cairo_t *cr, guint width, guint height, int border) {
 	if (border == Bottom_border || border == Bottom_left_corner)
 		end_y -= 5;
 	if (border == Right_border || border == Bottom_right_corner ||
-			border == Up_right_corner)
+            border == Up_right_corner)
 		return;
 
 
@@ -64,9 +64,9 @@ void draw_cell(cairo_t *cr, guint width, guint height, guint size)
 	cairo_set_line_width(cr, 4.5);
 
 	cairo_rectangle(cr, x_center - size / 4,
-									y_center - size / 4,
-									size / 2 ,
-									size / 2);
+                        y_center - size / 4,
+                        size / 2 ,
+                        size / 2);
 
 	cairo_set_line_width(cr, 4);
 	cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -102,10 +102,10 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 													 cr);
 		draw_player(cr, width, height, size);
 	}
-	//draw_horizontal_wall (cr, cell_allocation->width, cell_allocation->height,
-	//											gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
-	//draw_vertical_wall (cr, cell_allocation->width, cell_allocation->height,
-	//										gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
+	/*draw_horizontal_wall (cr, cell_allocation->width, cell_allocation->height,
+                              gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
+	draw_vertical_wall (cr, cell_allocation->width, cell_allocation->height,
+	  		    gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));*/
 	return FALSE;
 }
 
@@ -143,6 +143,15 @@ draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data) {
 	cairo_stroke(cr);
 	return TRUE;
 }
+
+
+gboolean 
+player_changed_callback (GnoridorBoard *board, gpointer data) 
+{
+    printf("PLAYER CHANGED\n");
+    return FALSE;
+}
+
 
 //------------------------------------------------------------------------------
 // BUTTONS CALLBACKS

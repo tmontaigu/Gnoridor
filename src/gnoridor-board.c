@@ -12,19 +12,31 @@ G_DEFINE_TYPE (GnoridorBoard, gnoridor_board, GTK_TYPE_GRID);
 GnoridorBoard *
 gnoridor_board_new (void)
 {
-	return g_object_new (GNORIDOR_TYPE_BOARD, NULL);
+    return g_object_new (GNORIDOR_TYPE_BOARD, NULL);
 }
 
 static void
 gnoridor_board_class_init (GnoridorBoardClass *class)
 {
-	printf("gnoridor_board_class_init\n");
+    player_changed_signal = g_signal_newv("player_changed",                  
+                            G_TYPE_FROM_CLASS (class),
+                            G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                            NULL /* closure */,
+                            NULL /* accumulator */,
+                            NULL /* accumulator data */,
+                            NULL /* C marshaller */,
+                            G_TYPE_NONE /* return_type */,
+                            0     /* n_params */,
+                            NULL  /* param_types */);
+    printf("gnoridor_board_class_init\n");
 }
 
 // Constructeur, c'est appeller lors du g_object_new
 static void
 gnoridor_board_init (GnoridorBoard *self)
 {
+        g_signal_connect (G_OBJECT (self), "player_changed",
+                          G_CALLBACK (player_changed_callback), NULL);
 
 	gtk_grid_set_column_homogeneous (GTK_GRID (self), TRUE);
 	gtk_grid_set_row_homogeneous    (GTK_GRID (self), TRUE);
@@ -39,7 +51,7 @@ gnoridor_board_init (GnoridorBoard *self)
 			self->cells[i][j]->col = j;
 
 			gtk_grid_attach (GTK_GRID (self),
-							 GTK_WIDGET (self->cells[i][j]), j, i, 1,1);
+					 GTK_WIDGET (self->cells[i][j]), j, i, 1,1);
 		}
 	}
 
@@ -104,30 +116,28 @@ gnoridor_board_check_move_validity (GnoridorBoard *self, GnoridorCell *old_cell,
 	switch (direction) {
 	case Up:
 		if (old_cell->row-1 < 0)
-			return NULL;
+                    return NULL;
 		new_cell = self->cells[old_cell->row-1][old_cell->col];
 		break;
 	case Down:
 		if ( old_cell->row+1 > 9)
-			return NULL;
+                    return NULL;
 		new_cell = self->cells[old_cell->row+1][old_cell->col];
 		break;
 	case Left:
 		if (old_cell->col-1 < 0)
-			return NULL;
+                    return NULL;
 		new_cell = self->cells[old_cell->row][old_cell->col-1];
 		break;
 	case Right:
 		if (old_cell->col+1 >= 9)
-			return NULL;
+                    return NULL;
 		new_cell = self->cells[old_cell->row][old_cell->col+1];
 		break;
 	}
 
 	if (gnoridor_cell_is_not_empty (new_cell))
 		new_cell = NULL;
-
-
 
 	return new_cell;
 }
@@ -157,8 +167,8 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 
 	GnoridorCell *old_cell = gnoridor_board_get_player_cell (self, player->id);
 	GnoridorCell *new_cell = gnoridor_board_check_move_validity (self,
-																															 old_cell,
-																															 direction);
+                                                                     old_cell,
+                                                                     direction);
 
 
 	if (new_cell == NULL) {
@@ -204,11 +214,16 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 void gnoridor_board_change_current_player(GnoridorBoard* self) {
     self->current_player_index = (self->current_player_index + 1) % self->number_of_player;
     self->current_player = self->player[self->current_player_index];
+    //g_signal_emit_by_name(self, "player_changed");
+    char label_text[25];
+    sprintf(label_text, "Current player:\n%s", self->current_player->name);
+    gtk_label_set_text (GTK_LABEL (current_player_label), label_text);
 }
 
 
 void
 gnoridor_board_set_window (GnoridorBoard *self, GtkWidget *window)
 {
-	self->window = window;
+    self->window = window;
 }
+

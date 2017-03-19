@@ -34,6 +34,7 @@ struct _GnoridorPlayer
 	GtkWidget *actions;
 	playerColor color;
 	int id;
+        char name[5];
 };
 
 
@@ -41,6 +42,7 @@ GnoridorPlayer *gnoridor_player_new (void);
 GnoridorPlayer *gnoridor_player_new_with_color (int color);
 void gnoridor_player_color (GnoridorPlayer *self, cairo_t *cr);
 void gnoridor_player_set_color (GnoridorPlayer *self, int color );
+void gnoridor_player_color_int_to_char (GnoridorPlayer *self);
 
 G_END_DECLS
 

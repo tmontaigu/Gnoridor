@@ -29,6 +29,8 @@ gboolean closed_callback (GtkPopover *pop, gpointer data);
 
 gboolean draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data);
 
+gboolean player_changed_callback (GnoridorBoard *board, gpointer data);
+
 /* player mouvement buttons callback */
 void up_button_callback (GtkWidget *button, gpointer data);
 void down_button_callback (GtkWidget *button, gpointer data);

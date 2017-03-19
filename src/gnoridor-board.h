@@ -6,6 +6,9 @@
 #include "gnoridor-player.h"
 #include "gnoridor-cell.h"
 
+
+int player_changed_signal;
+GtkWidget *current_player_label;
 G_BEGIN_DECLS
 
 

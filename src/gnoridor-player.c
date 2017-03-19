@@ -33,7 +33,9 @@ gnoridor_player_new (void)
 GnoridorPlayer *
 gnoridor_player_new_with_color (int color) {
 	GnoridorPlayer *self = gnoridor_player_new ();
+        self->id = color;
 	gnoridor_player_set_color (self, color);
+        gnoridor_player_color_int_to_char(self);
 	return self;
 }
 
@@ -71,7 +73,6 @@ gnoridor_player_set_color (GnoridorPlayer *self, int color) {
             self->color.g = 0.0;
             self->color.b = 0.0;
 	}
-	self->id = color;
 }
 
 static void
@@ -93,4 +94,20 @@ gnoridor_player_init (GnoridorPlayer *self)
 {
 }
 
+void
+gnoridor_player_color_int_to_char (GnoridorPlayer *self)
+{
+    switch (self->id) {
+        case BLUE:
+            sprintf(self->name, "Blue");
+            break;
+            
+        case RED:
+            sprintf(self->name, "Red");
+            break;
+        default:
+            sprintf(self->name, "Err");
+            break;
+    }
 
+}

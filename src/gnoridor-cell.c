@@ -28,6 +28,9 @@ gnoridor_cell_init (GnoridorCell *self)
 					  G_CALLBACK (draw_callback), NULL);
 	g_signal_connect (G_OBJECT   (self), "button_press_event",
 					  G_CALLBACK (click_cell_callback), NULL);
+	
+	self->vertical_wall = FALSE;
+	self->horizontal_wall = FALSE;
 }
 
 
@@ -64,8 +67,29 @@ gnoridor_cell_is_border (GnoridorCell *self)
 	if ( (self->row > 0 && self->row < 8) && (self->col > 0 && self->col < 8) )
 		return FALSE;
 	return TRUE;
+}void           
+gnoridor_cell_place_vertical_wall (GnoridorCell *self) 
+{
+	self->vertical_wall = TRUE;
 }
 
+void           
+gnoridor_cell_place_horizontal_wall (GnoridorCell *self) 
+{
+	self->horizontal_wall = TRUE;
+}
+
+gboolean       
+gnoridor_cell_vertical_wall (GnoridorCell *self) 
+{
+	return self->vertical_wall;
+}
+
+gboolean       
+gnoridor_cell_horizontal_wall (GnoridorCell *self)
+{
+	return self->horizontal_wall;
+}
 //TODO should probably be done with flags
 int
 gnoridor_cell_get_border_type (GnoridorCell *self)

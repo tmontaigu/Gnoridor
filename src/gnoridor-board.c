@@ -75,6 +75,9 @@ gnoridor_board_init (GnoridorBoard *self)
         // Player 0 is the first one to start
 	self->current_player = self->player[0];
         self->current_player_index = 0;
+	
+	self->window = NULL;
+	self->placing_vertical_wall = FALSE;
 }
 
 // static GnoridorPlayer*
@@ -193,7 +196,7 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 	{
 		GtkWidget *dialog;
 		char title[20];
-		sprintf(title, "Player %d wins", player->id+1);
+		sprintf(title, "Player %s wins", player->name);
 
 		int flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
 		dialog = gtk_dialog_new_with_buttons ((gchar*) title,

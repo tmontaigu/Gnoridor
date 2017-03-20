@@ -31,6 +31,9 @@ gboolean draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data);
 
 gboolean player_changed_callback (GnoridorBoard *board, gpointer data);
 
+void prepare_vertical_wall_callback (GtkWidget *button, gpointer data);
+void prepare_horizontal_wall_callback (GtkWidget *button, gpointer data);
+
 /* player mouvement buttons callback */
 void up_button_callback (GtkWidget *button, gpointer data);
 void down_button_callback (GtkWidget *button, gpointer data);

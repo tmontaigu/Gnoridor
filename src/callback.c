@@ -99,19 +99,67 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 	if (gnoridor_cell_is_not_empty (GNORIDOR_CELL (widget)))
 	{
 		gnoridor_player_color (gnoridor_cell_get_player_on_cell( GNORIDOR_CELL(widget)),
-													 cr);
+									 cr);
 		draw_player(cr, width, height, size);
 	}
-	/*draw_horizontal_wall (cr, cell_allocation->width, cell_allocation->height,
-                              gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
-	draw_vertical_wall (cr, cell_allocation->width, cell_allocation->height,
-	  		    gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));*/
+	
+	if (gnoridor_cell_horizontal_wall(GNORIDOR_CELL (widget)))
+	{
+		draw_horizontal_wall (cr, cell_allocation->width, cell_allocation->height,
+				      gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
+	}
+	if (gnoridor_cell_vertical_wall(GNORIDOR_CELL (widget)))
+	{
+		draw_vertical_wall (cr, cell_allocation->width, cell_allocation->height,
+				    gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
+	}
 	return FALSE;
 }
 
+// If the cell is the borders we can't place a wall since,
+// walls expands to the cell below or to the right
+// obvilously don't put a wall if there's already one
+
+// TODO using border prevents from putting wall starting on top row 
+// or most-left col
+// TODO give the user some info when his action failed
 gboolean
 click_cell_callback (GnoridorCell *cell, gpointer data) {
+	if (game_board->placing_vertical_wall)
+	{
+		if (gnoridor_cell_is_border (cell) || cell->vertical_wall)
+		{
+			game_board->placing_vertical_wall = FALSE;
+			return FALSE;
+		}
+		gnoridor_cell_place_vertical_wall (cell);
 
+		// Also place a wall on the cell below
+		GnoridorCell *below = game_board->cells[cell->row+1][cell->col];
+		gnoridor_cell_place_vertical_wall (below);
+		
+		game_board->placing_vertical_wall = FALSE;
+		gnoridor_board_change_current_player (game_board);
+		return FALSE; // Player's turn is over
+	}
+	if (game_board->placing_horizontal_wall)
+	{
+		if (gnoridor_cell_is_border (cell) || cell->vertical_wall)
+		{
+			game_board->placing_horizontal_wall = FALSE;
+			return FALSE;
+		}
+		gnoridor_cell_place_horizontal_wall (cell);
+		
+		// Also place a wall on the cell on the right
+		GnoridorCell *right = game_board->cells[cell->row][cell->col+1];
+		gnoridor_cell_place_horizontal_wall (right);
+		
+		game_board->placing_horizontal_wall = FALSE;
+		gnoridor_board_change_current_player (game_board);
+		return FALSE; // Player's turn is over
+	}
+	
 	if (cell->player_on_cell && game_board->current_player == cell->player_on_cell)
             gtk_popover_popup (GTK_POPOVER (cell->player_on_cell->actions));
 	return FALSE;
@@ -151,8 +199,15 @@ player_changed_callback (GnoridorBoard *board, gpointer data)
     printf("PLAYER CHANGED\n");
     return FALSE;
 }
+void prepare_vertical_wall_callback (GtkWidget *button, gpointer data) {
+	GnoridorBoard *board = data;
+	board->placing_vertical_wall = TRUE;
+}
 
-
+void prepare_horizontal_wall_callback (GtkWidget *button, gpointer data) {
+	GnoridorBoard *board = data;
+	board->placing_horizontal_wall = TRUE;
+}
 //------------------------------------------------------------------------------
 // BUTTONS CALLBACKS
 //------------------------------------------------------------------------------

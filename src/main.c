@@ -68,14 +68,20 @@ activate (GtkApplication *app,
         sprintf(label_text, "Current player:\nBlue");
         current_player_label = gtk_label_new (label_text);
 
-	GtkWidget *button = gtk_button_new_with_label ("mdr");
-	GtkWidget *button2 = gtk_button_new_with_label ("mdr2");
+	GtkWidget *place_vwall_button = gtk_button_new_with_label ("Place Vertical Wall");	
+	GtkWidget *place_hwall_button = gtk_button_new_with_label ("Place Horizontal Wall");
+	
+	g_signal_connect (G_OBJECT (place_vwall_button), "clicked", 
+			  G_CALLBACK (prepare_vertical_wall_callback), board);
+	g_signal_connect (G_OBJECT (place_hwall_button), "clicked", 
+			  G_CALLBACK (prepare_horizontal_wall_callback), board);
+
 
 	GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
 	gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 	gtk_container_add (GTK_CONTAINER (box), current_player_label);
-	gtk_container_add (GTK_CONTAINER (box), button);
-	gtk_container_add (GTK_CONTAINER (box), button2);
+	gtk_container_add (GTK_CONTAINER (box), place_vwall_button);
+	gtk_container_add (GTK_CONTAINER (box), place_hwall_button);
 
 
 	gtk_box_pack_start (GTK_BOX (game_box), overlay, TRUE, TRUE, 5);

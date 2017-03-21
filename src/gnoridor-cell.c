@@ -71,12 +71,16 @@ gnoridor_cell_is_border (GnoridorCell *self)
 gnoridor_cell_place_vertical_wall (GnoridorCell *self) 
 {
 	self->vertical_wall = TRUE;
+ 	// Refresh the cell
+	gtk_widget_queue_draw(GTK_WIDGET (self));
 }
 
 void           
 gnoridor_cell_place_horizontal_wall (GnoridorCell *self) 
 {
 	self->horizontal_wall = TRUE;
+	// Refresh the cell
+	gtk_widget_queue_draw(GTK_WIDGET (self));
 }
 
 gboolean       

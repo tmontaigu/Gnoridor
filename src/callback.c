@@ -95,6 +95,7 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 	double height = cell_allocation->height;
 	double size = width < height ? 1.25*width : 1.25*height;
 
+
 	draw_cell(cr, width, height, size);
 	if (gnoridor_cell_is_not_empty (GNORIDOR_CELL (widget)))
 	{
@@ -137,7 +138,7 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 		// Also place a wall on the cell below
 		GnoridorCell *below = game_board->cells[cell->row+1][cell->col];
 		gnoridor_cell_place_vertical_wall (below);
-		
+
 		game_board->placing_vertical_wall = FALSE;
 		gnoridor_board_change_current_player (game_board);
 		return FALSE; // Player's turn is over

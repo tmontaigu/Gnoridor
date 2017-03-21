@@ -47,6 +47,7 @@ gboolean player_changed_callback (GnoridorBoard *board, gpointer data);
 void prepare_vertical_wall_callback (GtkWidget *button, gpointer data);
 void prepare_horizontal_wall_callback (GtkWidget *button, gpointer data);
 
+void show_modal_window_callback(char *title, char *text);
 
 /* player mouvement buttons callback */
 void up_button_callback (GtkWidget *button, gpointer data);

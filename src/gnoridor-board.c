@@ -18,7 +18,7 @@ gnoridor_board_new (void)
 static void
 gnoridor_board_class_init (GnoridorBoardClass *class)
 {
-    player_changed_signal = g_signal_newv("player_changed",                  
+    notify_player_signal = g_signal_newv("notify_player",                  
                             G_TYPE_FROM_CLASS (class),
                             G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
                             NULL /* closure */,
@@ -35,7 +35,7 @@ gnoridor_board_class_init (GnoridorBoardClass *class)
 static void
 gnoridor_board_init (GnoridorBoard *self)
 {
-        g_signal_connect (G_OBJECT (self), "player_changed",
+        g_signal_connect (G_OBJECT (self), "notify_player",
                           G_CALLBACK (player_changed_callback), NULL);
 
 	gtk_grid_set_column_homogeneous (GTK_GRID (self), TRUE);
@@ -121,27 +121,34 @@ gnoridor_board_check_move_validity (GnoridorBoard *self, GnoridorCell *old_cell,
 		if (old_cell->row-1 < 0)
                     return NULL;
 		new_cell = self->cells[old_cell->row-1][old_cell->col];
+		if (gnoridor_cell_horizontal_wall(new_cell))
+			return NULL;
 		break;
 	case Down:
 		if ( old_cell->row+1 > 9)
                     return NULL;
 		new_cell = self->cells[old_cell->row+1][old_cell->col];
+		if (gnoridor_cell_horizontal_wall(old_cell))
+			return NULL;
 		break;
 	case Left:
 		if (old_cell->col-1 < 0)
                     return NULL;
 		new_cell = self->cells[old_cell->row][old_cell->col-1];
+		if (gnoridor_cell_vertical_wall(new_cell))
+			return NULL;
 		break;
 	case Right:
 		if (old_cell->col+1 >= 9)
                     return NULL;
 		new_cell = self->cells[old_cell->row][old_cell->col+1];
+		if (gnoridor_cell_vertical_wall(old_cell))
+			return NULL;
 		break;
 	}
 
 	if (gnoridor_cell_is_not_empty (new_cell))
 		new_cell = NULL;
-
 	return new_cell;
 }
 

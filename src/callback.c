@@ -204,6 +204,7 @@ void prepare_horizontal_wall_callback (GtkWidget *button, gpointer data) {
 	GnoridorBoard *board = data;
 	board->placing_horizontal_wall = TRUE;
 }
+
 //------------------------------------------------------------------------------
 // BUTTONS CALLBACKS
 //------------------------------------------------------------------------------

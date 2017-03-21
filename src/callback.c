@@ -131,6 +131,7 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 		if (gnoridor_cell_is_border (cell) || cell->vertical_wall)
 		{
 			game_board->placing_vertical_wall = FALSE;
+			show_dialog_window("You cannot place a wall here !");
 			return FALSE;
 		}
 		gnoridor_cell_place_vertical_wall (cell);
@@ -140,6 +141,7 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 		gnoridor_cell_place_vertical_wall (below);
 
 		game_board->placing_vertical_wall = FALSE;
+		game_board->current_player->number_of_walls--;
 		gnoridor_board_change_current_player (game_board);
 		return FALSE; // Player's turn is over
 	}
@@ -148,6 +150,7 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 		if (gnoridor_cell_is_border (cell) || cell->vertical_wall)
 		{
 			game_board->placing_horizontal_wall = FALSE;
+			show_dialog_window("You cannot place a wall here !");
 			return FALSE;
 		}
 		gnoridor_cell_place_horizontal_wall (cell);
@@ -157,6 +160,7 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 		gnoridor_cell_place_horizontal_wall (right);
 		
 		game_board->placing_horizontal_wall = FALSE;
+		game_board->current_player->number_of_walls--;
 		gnoridor_board_change_current_player (game_board);
 		return FALSE; // Player's turn is over
 	}
@@ -198,14 +202,38 @@ player_changed_callback (GnoridorBoard *board, gpointer data)
 void prepare_vertical_wall_callback (GtkWidget *button, gpointer data)
 {
 	GnoridorBoard *board = data;
+	if (board->current_player->number_of_walls == 0)
+	{
+		show_dialog_window("You cannot place wall anymore");
+		return;
+	}
+	
 	board->placing_horizontal_wall = FALSE;
 	board->placing_vertical_wall = TRUE;
 }
 
 void prepare_horizontal_wall_callback (GtkWidget *button, gpointer data) {
 	GnoridorBoard *board = data;
+	if (board->current_player->number_of_walls == 0)
+	{
+		show_dialog_window("Error: You cannot place wall anymore");
+		return;
+	}
 	board->placing_vertical_wall = FALSE;
 	board->placing_horizontal_wall = TRUE;
+}
+
+void show_dialog_window(char *text)
+{
+	GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
+	GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (game_board->window),
+					 flags,
+					 GTK_MESSAGE_ERROR,
+					 GTK_BUTTONS_CLOSE,
+					 "%s", text);
+	gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
+
 }
 
 //------------------------------------------------------------------------------

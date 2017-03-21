@@ -33,6 +33,7 @@ struct _GnoridorPlayer
 	GtkBuilder *builder;
 	GtkWidget *actions;
 	playerColor color;
+        int number_of_walls;
 	int id;
         char name[5];
 };

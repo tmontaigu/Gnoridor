@@ -7,7 +7,7 @@
 
 G_DEFINE_TYPE (GnoridorBoard, gnoridor_board, GTK_TYPE_GRID);
 
-
+#define NUMBER_OF_WALLS 4
 
 GnoridorBoard *
 gnoridor_board_new (void)
@@ -18,7 +18,7 @@ gnoridor_board_new (void)
 static void
 gnoridor_board_class_init (GnoridorBoardClass *class)
 {
-    notify_player_signal = g_signal_newv("notify_player",                  
+	notify_player_signal = g_signal_newv("notify_player",                  
                             G_TYPE_FROM_CLASS (class),
                             G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
                             NULL /* closure */,
@@ -28,7 +28,7 @@ gnoridor_board_class_init (GnoridorBoardClass *class)
                             G_TYPE_NONE /* return_type */,
                             0     /* n_params */,
                             NULL  /* param_types */);
-    printf("gnoridor_board_class_init\n");
+	printf("gnoridor_board_class_init\n");
 }
 
 // Constructeur, c'est appeller lors du g_object_new
@@ -60,17 +60,20 @@ gnoridor_board_init (GnoridorBoard *self)
 	self->player = malloc (sizeof * self->player * self->number_of_player);
 	self->player_cell = malloc (sizeof * self->player_cell * self->number_of_player);
 
+	
 
         // Create 2 players
 	GnoridorPlayer *p = gnoridor_player_new_with_color (BLUE);
 	gnoridor_cell_put_player (self->cells[0][4], p);
 	self->player_cell[0] = self->cells[0][4];
 	self->player[0] = p;
+	p->number_of_walls = NUMBER_OF_WALLS / self->number_of_player;
 
 	p = gnoridor_player_new_with_color (RED);
 	gnoridor_cell_put_player (self->cells[8][4], p);
 	self->player_cell[1] = self->cells[8][4];
 	self->player[1] = p;
+	p->number_of_walls = NUMBER_OF_WALLS / self->number_of_player;
 
         // Player 0 is the first one to start
 	self->current_player = self->player[0];
@@ -80,15 +83,6 @@ gnoridor_board_init (GnoridorBoard *self)
 	self->placing_vertical_wall = FALSE;
 }
 
-// static GnoridorPlayer*
-// gnoridor_board_get_player(GnoridorBoard *self, int color_id)
-// {
-// 	for (int i = 0; i < self->number_of_player; i++) {
-// 		if (self->player[i]->id == color_id)
-// 			return self->player[i];
-// 	}
-// 	return NULL;
-// }
 
 static GnoridorCell*
 gnoridor_board_get_player_cell(GnoridorBoard *self, int color_id)
@@ -182,16 +176,16 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 
 
 	if (new_cell == NULL) {
-            printf("invalid move\n");
-            return FALSE;
+		show_dialog_window("You cannot move in this direction");
+		return FALSE;
 	}
 
         if (self->current_player != player)
         {
-            printf("Not players turn\n");
-            // To make sure the AI won't be able to move multiple times
-            gtk_popover_popdown( GTK_POPOVER (player->actions));
-            return FALSE;
+		printf("Not players turn\n");
+		// To make sure the AI won't be able to move multiple times
+		gtk_popover_popdown( GTK_POPOVER (player->actions));
+		return FALSE;
         }
 
 	gnoridor_cell_remove_player (old_cell);
@@ -201,39 +195,27 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 	gboolean player_wins = gnoridor_board_check_win (self, player);
 	if (player_wins) // show popup window
 	{
-		GtkWidget *dialog;
-		char title[20];
-		sprintf(title, "Player %s wins", player->name);
+		char text[20];
+		sprintf(text, "%s player wins", player->name);
+		show_dialog_window(text);
 
-		int flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
-		dialog = gtk_dialog_new_with_buttons ((gchar*) title,
-	                                    GTK_WINDOW (self->window),
-  	                                    flags,
-  	                                    "_OK",
-  	                                    GTK_RESPONSE_ACCEPT,
-  	                                    "_Cancel",
-  	                                    GTK_RESPONSE_REJECT,
-  	                                    NULL);
-            gint response = gtk_dialog_run (GTK_DIALOG (dialog));
-            printf ("response : %d\n",response);
-            gtk_widget_hide (dialog);
 	}
 	return TRUE;
 }
 
 void gnoridor_board_change_current_player(GnoridorBoard* self) {
-    self->current_player_index = (self->current_player_index + 1) % self->number_of_player;
-    self->current_player = self->player[self->current_player_index];
-    //g_signal_emit_by_name(self, "player_changed");
-    char label_text[25];
-    sprintf(label_text, "Current player:\n%s", self->current_player->name);
-    gtk_label_set_text (GTK_LABEL (current_player_label), label_text);
+	self->current_player_index = (self->current_player_index + 1) % self->number_of_player;
+	self->current_player = self->player[self->current_player_index];
+	//g_signal_emit_by_name(self, "player_changed");
+	char label_text[25];
+	sprintf(label_text, "Current player:\n%s", self->current_player->name);
+	gtk_label_set_text (GTK_LABEL (current_player_label), label_text);
 }
 
 
 void
 gnoridor_board_set_window (GnoridorBoard *self, GtkWidget *window)
 {
-    self->window = window;
+	self->window = window;
 }
 

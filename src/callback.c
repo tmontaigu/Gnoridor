@@ -195,13 +195,16 @@ player_changed_callback (GnoridorBoard *board, gpointer data)
     printf("PLAYER CHANGED\n");
     return FALSE;
 }
-void prepare_vertical_wall_callback (GtkWidget *button, gpointer data) {
+void prepare_vertical_wall_callback (GtkWidget *button, gpointer data)
+{
 	GnoridorBoard *board = data;
+	board->placing_horizontal_wall = FALSE;
 	board->placing_vertical_wall = TRUE;
 }
 
 void prepare_horizontal_wall_callback (GtkWidget *button, gpointer data) {
 	GnoridorBoard *board = data;
+	board->placing_vertical_wall = FALSE;
 	board->placing_horizontal_wall = TRUE;
 }
 

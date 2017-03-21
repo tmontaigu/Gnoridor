@@ -84,7 +84,6 @@ void draw_player(cairo_t *cr, guint width, guint height, guint size) {
 }
 
 // TODO Maybe drawing squares instead of rectangle should be better
-// TODO Add drawing of walls
 gboolean
 draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 {
@@ -124,6 +123,7 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 // TODO using border prevents from putting wall starting on top row 
 // or most-left col
 // TODO give the user some info when his action failed
+// Like coloring cell where you can click to place a wall in green
 gboolean
 click_cell_callback (GnoridorCell *cell, gpointer data) {
 	if (game_board->placing_vertical_wall)
@@ -166,11 +166,6 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 	return FALSE;
 }
 
-gboolean
-closed_callback (GtkPopover *pop, gpointer data) {
-	printf("closed signal\n");
-	return FALSE;
-}
 
 gboolean
 draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data) {

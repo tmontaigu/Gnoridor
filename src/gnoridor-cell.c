@@ -23,12 +23,13 @@ static void
 gnoridor_cell_init (GnoridorCell *self)
 {
 	gtk_widget_add_events (GTK_WIDGET (self), GDK_BUTTON_PRESS_MASK);
-	self->player_on_cell = NULL;
+
 	g_signal_connect (G_OBJECT   (self), "draw",
 					  G_CALLBACK (draw_callback), NULL);
 	g_signal_connect (G_OBJECT   (self), "button_press_event",
 					  G_CALLBACK (click_cell_callback), NULL);
-	
+
+	self->player_on_cell = NULL;
 	self->vertical_wall = FALSE;
 	self->horizontal_wall = FALSE;
 }
@@ -61,14 +62,8 @@ gnoridor_cell_get_player_on_cell (GnoridorCell *self) {
 	return NULL;
 }
 
-gboolean
-gnoridor_cell_is_border (GnoridorCell *self)
-{
-	if ( (self->row > 0 && self->row < 8) && (self->col > 0 && self->col < 8) )
-		return FALSE;
-	return TRUE;
-}void           
-gnoridor_cell_place_vertical_wall (GnoridorCell *self) 
+void
+gnoridor_cell_place_vertical_wall (GnoridorCell *self)
 {
 	self->vertical_wall = TRUE;
  	// Refresh the cell
@@ -121,4 +116,12 @@ gnoridor_cell_get_border_type (GnoridorCell *self)
 		return Right_border;
 
 	return Not_border;
+}
+
+gboolean
+gnoridor_cell_is_border (GnoridorCell *self)
+{
+	if ( (self->row > 0 && self->row < 8) && (self->col > 0 && self->col < 8) )
+		return FALSE;
+	return TRUE;
 }

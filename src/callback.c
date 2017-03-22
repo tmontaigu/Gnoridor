@@ -122,15 +122,20 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 
 // TODO using border prevents from putting wall starting on top row 
 // or most-left col
-// TODO give the user some info when his action failed
-// Like coloring cell where you can click to place a wall in green
+// TODO The best thing would be to make button untoggable when all walls are placed
 gboolean
 click_cell_callback (GnoridorCell *cell, gpointer data) {
-	if (game_board->placing_vertical_wall)
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle)))
 	{
+		if (game_board->current_player->number_of_walls <= 0)
+		{
+			show_dialog_window("You don't have any wall left !");
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle), FALSE);
+			return FALSE;
+		}
+
 		if (gnoridor_cell_is_border (cell) || cell->vertical_wall)
 		{
-			game_board->placing_vertical_wall = FALSE;
 			show_dialog_window("You cannot place a wall here !");
 			return FALSE;
 		}
@@ -140,16 +145,24 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 		GnoridorCell *below = game_board->cells[cell->row+1][cell->col];
 		gnoridor_cell_place_vertical_wall (below);
 
-		game_board->placing_vertical_wall = FALSE;
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle), FALSE);
+
 		game_board->current_player->number_of_walls--;
 		gnoridor_board_change_current_player (game_board);
 		return FALSE; // Player's turn is over
 	}
-	if (game_board->placing_horizontal_wall)
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle)))
 	{
+		if (game_board->current_player->number_of_walls <= 0)
+		{
+			show_dialog_window("You don't have any wall left !");
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle), FALSE);
+			return FALSE;
+		}
+
 		if (gnoridor_cell_is_border (cell) || cell->horizontal_wall)
 		{
-			game_board->placing_horizontal_wall = FALSE;
+			//game_board->placing_horizontal_wall = FALSE;
 			show_dialog_window("You cannot place a wall here !");
 			return FALSE;
 		}
@@ -158,9 +171,10 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 		// Also place a wall on the cell on the right
 		GnoridorCell *right = game_board->cells[cell->row][cell->col+1];
 		gnoridor_cell_place_horizontal_wall (right);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle), FALSE);
 		
-		game_board->placing_horizontal_wall = FALSE;
 		game_board->current_player->number_of_walls--;
+		printf("g: %d\n", game_board->current_player->number_of_walls);
 		gnoridor_board_change_current_player (game_board);
 		return FALSE; // Player's turn is over
 	}
@@ -193,12 +207,13 @@ draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data) {
 }
 
 
-gboolean 
-player_changed_callback (GnoridorBoard *board, gpointer data) 
+gboolean
+player_changed_callback (GnoridorBoard *board, gpointer data)
 {
     printf("PLAYER CHANGED\n");
     return FALSE;
 }
+/*
 void prepare_vertical_wall_callback (GtkWidget *button, gpointer data)
 {
 	GnoridorBoard *board = data;
@@ -207,11 +222,12 @@ void prepare_vertical_wall_callback (GtkWidget *button, gpointer data)
 		show_dialog_window("You cannot place wall anymore");
 		return;
 	}
-	
+
 	board->placing_horizontal_wall = FALSE;
 	board->placing_vertical_wall = TRUE;
 }
-
+*/
+/*
 void prepare_horizontal_wall_callback (GtkWidget *button, gpointer data) {
 	GnoridorBoard *board = data;
 	if (board->current_player->number_of_walls == 0)
@@ -222,7 +238,7 @@ void prepare_horizontal_wall_callback (GtkWidget *button, gpointer data) {
 	board->placing_vertical_wall = FALSE;
 	board->placing_horizontal_wall = TRUE;
 }
-
+*/
 void show_dialog_window(char *text)
 {
 	GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
@@ -234,6 +250,20 @@ void show_dialog_window(char *text)
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 
+}
+
+void prepare_horizontal_wall_callback (GtkWidget *button, gpointer data)
+{
+	GnoridorBoard *board = data;
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (board->vwall_toggle), FALSE);
+	board->placing_horizontal_wall = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+}
+
+void prepare_vertical_wall_callback (GtkWidget *button, gpointer data)
+{
+	GnoridorBoard *board = data;
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (board->hwall_toggle), FALSE);
+	board->placing_vertical_wall = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 }
 
 //------------------------------------------------------------------------------

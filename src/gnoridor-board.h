@@ -40,6 +40,8 @@ struct _GnoridorBoard
         gboolean placing_horizontal_wall;
 
 	GtkWidget *window;
+	GtkWidget *vwall_toggle;
+	GtkWidget *hwall_toggle;
 };
 
 

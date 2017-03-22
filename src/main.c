@@ -67,13 +67,28 @@ activate (GtkApplication *app,
         sprintf(label_text, "Current player:\nBlue");
         current_player_label = gtk_label_new (label_text);
 
-	GtkWidget *place_vwall_button = gtk_button_new_with_label ("Place Vertical Wall");	
-	GtkWidget *place_hwall_button = gtk_button_new_with_label ("Place Horizontal Wall");
-	
-	g_signal_connect (G_OBJECT (place_vwall_button), "clicked", 
-			  G_CALLBACK (prepare_vertical_wall_callback), board);
-	g_signal_connect (G_OBJECT (place_hwall_button), "clicked", 
-			  G_CALLBACK (prepare_horizontal_wall_callback), board);
+
+	GtkWidget *place_hwall_button, *place_vwall_button;
+	place_hwall_button = gtk_toggle_button_new_with_label ("Place Horizontal Wall");
+	place_vwall_button = gtk_toggle_button_new_with_label ("Place Vertical Wall");
+
+	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (place_hwall_button), FALSE);
+	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (place_vwall_button), FALSE);
+
+
+	/*
+	g_signal_connect (place_hwall_button, "toggled",
+                     G_CALLBACK (prepare_horizontal_wall_callback),
+                     board);
+
+	g_signal_connect (place_vwall_button, "toggled",
+                     G_CALLBACK (prepare_vertical_wall_callback),
+                     board);
+	*/
+
+	board->vwall_toggle = place_vwall_button;
+	board->hwall_toggle = place_hwall_button;
+
 
 
 	GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);

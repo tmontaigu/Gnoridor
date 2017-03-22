@@ -29,11 +29,10 @@ activate (GtkApplication *app,
 	GtkWidget *header_bar;
 	GnoridorBoard *board;
 
-
 	// Init Window
 	window = gtk_application_window_new (app);
 	gtk_window_set_title (GTK_WINDOW (window), "Gnoridor");
-	gtk_window_set_default_size (GTK_WINDOW (window), 640, 400);
+	gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
 
 
 	// The header bar

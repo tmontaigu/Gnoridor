@@ -102,7 +102,7 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 									 cr);
 		draw_player(cr, width, height, size);
 	}
-	
+
 	if (gnoridor_cell_horizontal_wall(GNORIDOR_CELL (widget)))
 	{
 		draw_horizontal_wall (cr, cell_allocation->width, cell_allocation->height,
@@ -120,7 +120,7 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 // walls expands to the cell below or to the right
 // obvilously don't put a wall if there's already one
 
-// TODO using border prevents from putting wall starting on top row 
+// TODO using border prevents from putting wall starting on top row
 // or most-left col
 // TODO The best thing would be to make button untoggable when all walls are placed
 gboolean
@@ -167,18 +167,18 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 			return FALSE;
 		}
 		gnoridor_cell_place_horizontal_wall (cell);
-		
+
 		// Also place a wall on the cell on the right
 		GnoridorCell *right = game_board->cells[cell->row][cell->col+1];
 		gnoridor_cell_place_horizontal_wall (right);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle), FALSE);
-		
+
 		game_board->current_player->number_of_walls--;
 		printf("g: %d\n", game_board->current_player->number_of_walls);
 		gnoridor_board_change_current_player (game_board);
 		return FALSE; // Player's turn is over
 	}
-	
+
 	if (cell->player_on_cell && game_board->current_player == cell->player_on_cell)
             gtk_popover_popup (GTK_POPOVER (cell->player_on_cell->actions));
 	return FALSE;
@@ -195,10 +195,10 @@ draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data) {
 
 	int offset = 5;
 	cairo_rectangle(cr,
-                        offset,
-                        offset,
-                        board_allocation->width - 2*offset,
-                        board_allocation->height - 2*offset);
+					offset,
+					offset,
+					board_allocation->width - 2*offset,
+					board_allocation->height - 2*offset);
 
 	cairo_set_line_width(cr, 4);
 	cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -213,32 +213,7 @@ player_changed_callback (GnoridorBoard *board, gpointer data)
     printf("PLAYER CHANGED\n");
     return FALSE;
 }
-/*
-void prepare_vertical_wall_callback (GtkWidget *button, gpointer data)
-{
-	GnoridorBoard *board = data;
-	if (board->current_player->number_of_walls == 0)
-	{
-		show_dialog_window("You cannot place wall anymore");
-		return;
-	}
 
-	board->placing_horizontal_wall = FALSE;
-	board->placing_vertical_wall = TRUE;
-}
-*/
-/*
-void prepare_horizontal_wall_callback (GtkWidget *button, gpointer data) {
-	GnoridorBoard *board = data;
-	if (board->current_player->number_of_walls == 0)
-	{
-		show_dialog_window("Error: You cannot place wall anymore");
-		return;
-	}
-	board->placing_vertical_wall = FALSE;
-	board->placing_horizontal_wall = TRUE;
-}
-*/
 void show_dialog_window(char *text)
 {
 	GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
@@ -270,7 +245,6 @@ void prepare_vertical_wall_callback (GtkWidget *button, gpointer data)
 // BUTTONS CALLBACKS
 //------------------------------------------------------------------------------
 
-// TODO close popover when player moved succesfully
 
 void
 up_button_callback (GtkWidget *button, gpointer data) {
@@ -309,7 +283,6 @@ right_button_callback (GtkWidget *button, gpointer data) {
         if (succesful) {
             gnoridor_board_change_current_player(game_board);
             gtk_popover_popdown (GTK_POPOVER (player->actions));
-            
         }
 }
 

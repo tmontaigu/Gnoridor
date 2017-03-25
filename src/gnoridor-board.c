@@ -18,7 +18,7 @@ gnoridor_board_new (void)
 static void
 gnoridor_board_class_init (GnoridorBoardClass *class)
 {
-	notify_player_signal = g_signal_newv("notify_player",                  
+	notify_player_signal = g_signal_newv("notify_player",
                             G_TYPE_FROM_CLASS (class),
                             G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
                             NULL /* closure */,
@@ -60,7 +60,7 @@ gnoridor_board_init (GnoridorBoard *self)
 	self->player = malloc (sizeof * self->player * self->number_of_player);
 	self->player_cell = malloc (sizeof * self->player_cell * self->number_of_player);
 
-	
+
 
         // Create 2 players
 	GnoridorPlayer *p = gnoridor_player_new_with_color (BLUE);
@@ -78,7 +78,7 @@ gnoridor_board_init (GnoridorBoard *self)
         // Player 0 is the first one to start
 	self->current_player = self->player[0];
         self->current_player_index = 0;
-	
+
 	self->window = NULL;
 	self->placing_vertical_wall = FALSE;
 }
@@ -191,7 +191,6 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 	gnoridor_cell_remove_player (old_cell);
 	gnoridor_cell_put_player (new_cell, player);
 	gnoridor_board_set_player_cell(self, player->id, new_cell);
-	//gtk_popover_popdown (GTK_POPOVER (player->actions));
 	gboolean player_wins = gnoridor_board_check_win (self, player);
 	if (player_wins) // show popup window
 	{
@@ -207,8 +206,22 @@ void gnoridor_board_change_current_player(GnoridorBoard* self) {
 	self->current_player_index = (self->current_player_index + 1) % self->number_of_player;
 	self->current_player = self->player[self->current_player_index];
 	//g_signal_emit_by_name(self, "player_changed");
-	char label_text[25];
-	sprintf(label_text, "Current player:\n%s", self->current_player->name);
+	char label_text[45];
+	sprintf(label_text, "Current player:\n%s\nRemaining walls: %d", self->current_player->name,
+																	self->current_player->number_of_walls);
+
+
+	if (self->current_player->number_of_walls > 0)
+	{
+		gtk_widget_set_sensitive(GTK_WIDGET (self->hwall_toggle), TRUE);
+		gtk_widget_set_sensitive(GTK_WIDGET (self->vwall_toggle), TRUE);
+	}
+	else
+	{
+		gtk_widget_set_sensitive(GTK_WIDGET (self->hwall_toggle), FALSE);
+		gtk_widget_set_sensitive(GTK_WIDGET (self->vwall_toggle), FALSE);
+	}
+
 	gtk_label_set_text (GTK_LABEL (current_player_label), label_text);
 }
 

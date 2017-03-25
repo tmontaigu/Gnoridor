@@ -25,7 +25,7 @@ struct _GnoridorCell
 
         gboolean vertical_wall;
         gboolean horizontal_wall;
-        
+
 	int row;
 	int col;
 };

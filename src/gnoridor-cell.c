@@ -70,21 +70,21 @@ gnoridor_cell_place_vertical_wall (GnoridorCell *self)
 	gtk_widget_queue_draw(GTK_WIDGET (self));
 }
 
-void           
-gnoridor_cell_place_horizontal_wall (GnoridorCell *self) 
+void
+gnoridor_cell_place_horizontal_wall (GnoridorCell *self)
 {
 	self->horizontal_wall = TRUE;
 	// Refresh the cell
 	gtk_widget_queue_draw(GTK_WIDGET (self));
 }
 
-gboolean       
-gnoridor_cell_vertical_wall (GnoridorCell *self) 
+gboolean
+gnoridor_cell_vertical_wall (GnoridorCell *self)
 {
 	return self->vertical_wall;
 }
 
-gboolean       
+gboolean
 gnoridor_cell_horizontal_wall (GnoridorCell *self)
 {
 	return self->horizontal_wall;
@@ -95,19 +95,19 @@ gnoridor_cell_get_border_type (GnoridorCell *self)
 {
 	if (self->row == 0)
 	{
-		if (self->col == 0)
-			return Up_left_corner;
-		if (self->col == 8)
-			return Up_right_corner;
+		// if (self->col == 0)
+		// 	return Up_left_corner;
+		// if (self->col == 8)
+		// 	return Up_right_corner;
 		return Up_border;
 	}
 
 	if (self->row == 8)
 	{
-		if (self->col == 0)
-			return Bottom_left_corner;
-		if (self->col == 8)
-			return Bottom_right_corner;
+		// if (self->col == 0)
+		// 	return Bottom_left_corner;
+		// if (self->col == 8)
+		// 	return Bottom_right_corner;
 		return Bottom_border;
 	}
 	if (self->col == 0)

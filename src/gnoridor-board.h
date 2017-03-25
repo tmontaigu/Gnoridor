@@ -35,7 +35,7 @@ struct _GnoridorBoard
         int current_player_index;
 	GnoridorPlayer *current_player;
 	GnoridorCell **player_cell;
-        
+
         gboolean placing_vertical_wall;
         gboolean placing_horizontal_wall;
 

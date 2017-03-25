@@ -125,6 +125,7 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 // TODO The best thing would be to make button untoggable when all walls are placed
 gboolean
 click_cell_callback (GnoridorCell *cell, gpointer data) {
+	// Vertical wall
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle)))
 	{
 		if (game_board->current_player->number_of_walls <= 0)
@@ -134,7 +135,9 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 			return FALSE;
 		}
 
-		if (gnoridor_cell_is_border (cell) || cell->vertical_wall)
+		if (gnoridor_cell_get_border_type (cell) == Bottom_border ||
+			gnoridor_cell_get_border_type (cell) == Right_border  ||
+			cell->vertical_wall)
 		{
 			show_dialog_window("You cannot place a wall here !");
 			return FALSE;
@@ -151,6 +154,7 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 		gnoridor_board_change_current_player (game_board);
 		return FALSE; // Player's turn is over
 	}
+	// Horizontal wall
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle)))
 	{
 		if (game_board->current_player->number_of_walls <= 0)
@@ -160,7 +164,9 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 			return FALSE;
 		}
 
-		if (gnoridor_cell_is_border (cell) || cell->horizontal_wall)
+		if (gnoridor_cell_get_border_type (cell) == Bottom_border ||
+			gnoridor_cell_get_border_type (cell) == Right_border  ||
+			cell->vertical_wall)
 		{
 			//game_board->placing_horizontal_wall = FALSE;
 			show_dialog_window("You cannot place a wall here !");

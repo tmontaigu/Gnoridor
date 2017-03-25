@@ -166,9 +166,8 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 
 		if (gnoridor_cell_get_border_type (cell) == Bottom_border ||
 			gnoridor_cell_get_border_type (cell) == Right_border  ||
-			cell->vertical_wall)
+			cell->horizontal_wall)
 		{
-			//game_board->placing_horizontal_wall = FALSE;
 			show_dialog_window("You cannot place a wall here !");
 			return FALSE;
 		}

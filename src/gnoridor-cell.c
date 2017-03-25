@@ -102,7 +102,7 @@ gnoridor_cell_get_border_type (GnoridorCell *self)
 		return Up_border;
 	}
 
-	if (self->row == 8)
+	if (self->row == NUMBER_OF_ROWS - 1)
 	{
 		// if (self->col == 0)
 		// 	return Bottom_left_corner;
@@ -112,7 +112,7 @@ gnoridor_cell_get_border_type (GnoridorCell *self)
 	}
 	if (self->col == 0)
 		return Left_border;
-	if (self->col == 8)
+	if (self->col == NUMBER_OF_COLS - 1)
 		return Right_border;
 
 	return Not_border;
@@ -121,7 +121,8 @@ gnoridor_cell_get_border_type (GnoridorCell *self)
 gboolean
 gnoridor_cell_is_border (GnoridorCell *self)
 {
-	if ( (self->row > 0 && self->row < 8) && (self->col > 0 && self->col < 8) )
+	if ( (self->row > 0 && self->row < NUMBER_OF_ROWS - 1) &&
+	   (self->col > 0 && self->col < NUMBER_OF_COLS - 1))
 		return FALSE;
 	return TRUE;
 }

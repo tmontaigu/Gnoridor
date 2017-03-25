@@ -7,8 +7,6 @@
 
 G_DEFINE_TYPE (GnoridorBoard, gnoridor_board, GTK_TYPE_GRID);
 
-#define NUMBER_OF_WALLS 4
-
 GnoridorBoard *
 gnoridor_board_new (void)
 {
@@ -42,9 +40,9 @@ gnoridor_board_init (GnoridorBoard *self)
 	gtk_grid_set_row_homogeneous    (GTK_GRID (self), TRUE);
 
 	// Create cells and position them on the grid
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < NUMBER_OF_ROWS; i++)
 	{
-		for (int j = 0; j < 9; j++)
+		for (int j = 0; j < NUMBER_OF_COLS; j++)
 		{
 			self->cells[i][j] = gnoridor_cell_new ();
 			self->cells[i][j]->row = i;

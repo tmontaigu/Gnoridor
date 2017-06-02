@@ -15,10 +15,8 @@ gnoridor_cell_new (void)
 static void
 gnoridor_cell_class_init (GnoridorCellClass*class)
 {
-	printf("gnoridor_cell_class_init\n");
 }
 
-// Constructeur, c'est appeller lors du g_object_new
 static void
 gnoridor_cell_init (GnoridorCell *self)
 {

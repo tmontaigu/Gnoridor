@@ -178,13 +178,13 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 		return FALSE;
 	}
 
-        if (self->current_player != player)
-        {
-		printf("Not players turn\n");
-		// To make sure the AI won't be able to move multiple times
-		gtk_popover_popdown( GTK_POPOVER (player->actions));
-		return FALSE;
-        }
+	if (self->current_player != player)
+	{
+	printf("Not players turn\n");
+	// To make sure the AI won't be able to move multiple times
+	gtk_popover_popdown( GTK_POPOVER (player->actions));
+	return FALSE;
+	}
 
 	gnoridor_cell_remove_player (old_cell);
 	gnoridor_cell_put_player (new_cell, player);
@@ -223,6 +223,67 @@ void gnoridor_board_change_current_player(GnoridorBoard* self) {
 	gtk_label_set_text (GTK_LABEL (current_player_label), label_text);
 }
 
+static int
+count_num(int *visited) {
+	int count = 0;
+	for (int i = 0; i < NUMBER_OF_ROWS * NUMBER_OF_COLS; ++i) {
+		++count;
+	}
+	return count;
+}
+
+gboolean
+gnoridor_board_can_place_wall (GnoridorBoard *self) {
+	GQueue *queue = g_queue_new ();
+	int number_of_cells = NUMBER_OF_ROWS * NUMBER_OF_COLS;
+	int *visited = malloc(sizeof(int) * number_of_cells);
+
+	for (int i = 0; i < number_of_cells; ++i) {
+		visited[i] = 0;
+	}
+
+	int current_cell = 0;
+	g_queue_push_tail(queue, GINT_TO_POINTER (0));
+
+	while (!g_queue_is_empty (queue)) {
+		int cell_number = GPOINTER_TO_INT (g_queue_pop_head (queue));
+		int row = current_cell / NUMBER_OF_ROWS;
+		int col = current_cell % NUMBER_OF_ROWS;
+		visited[cell_number] = 1;
+		GnoridorCell *current_cell = self->cells[row][col];
+
+		if (gnoridor_board_check_move_validity (self, current_cell, Up)) {
+			int position = (row-1) * NUMBER_OF_ROWS + col;
+			if (!visited[position])
+				g_queue_push_tail (queue, GINT_TO_POINTER (position));
+		}
+
+		if (gnoridor_board_check_move_validity (self, current_cell, Down)) {
+			int position = (row+1) * NUMBER_OF_ROWS + col;
+			if (!visited[position])
+				g_queue_push_tail (queue, GINT_TO_POINTER (position));
+		}
+
+		if (gnoridor_board_check_move_validity (self, current_cell, Left)) {
+			int position = row * NUMBER_OF_ROWS + (col-1);
+			if (!visited[position])
+				g_queue_push_tail (queue, GINT_TO_POINTER (position));
+		}
+
+		if (gnoridor_board_check_move_validity (self, current_cell, Right)) {
+			int position = row * NUMBER_OF_ROWS + (col+1);
+			if (!visited[position])
+				g_queue_push_tail (queue, GINT_TO_POINTER (position));
+		}
+
+	}
+	free (visited);
+
+	if (count_num(visited) != number_of_cells) {
+		return TRUE;
+	}
+	return FALSE;
+}
 
 void
 gnoridor_board_set_window (GnoridorBoard *self, GtkWidget *window)

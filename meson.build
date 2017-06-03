@@ -1,6 +1,8 @@
 project('Gnoridor' ,'c')
 gtkdep = dependency('gtk+-3.0')
 
+add_global_arguments('-std=c99', language : 'c')
+
 gnome = import('gnome')
 gnresources = gnome.compile_resources('gnoridor-resources', 'src/resources/gnoridor.gresource.xml')
 

@@ -280,9 +280,9 @@ gnoridor_board_can_place_wall (GnoridorBoard *self) {
 	free (visited);
 
 	if (count_num(visited) != number_of_cells) {
-		return TRUE;
+		return FALSE;
 	}
-	return FALSE;
+	return TRUE;
 }
 
 void

@@ -32,12 +32,12 @@ struct _GnoridorBoard
 	GnoridorCell *cells[9][9];
 	int number_of_player;
 	GnoridorPlayer **player;
-        int current_player_index;
+	int current_player_index;
 	GnoridorPlayer *current_player;
 	GnoridorCell **player_cell;
 
-        gboolean placing_vertical_wall;
-        gboolean placing_horizontal_wall;
+	gboolean placing_vertical_wall;
+    gboolean placing_horizontal_wall;
 
 	GtkWidget *window;
 	GtkWidget *vwall_toggle;

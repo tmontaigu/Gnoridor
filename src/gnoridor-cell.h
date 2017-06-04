@@ -4,7 +4,7 @@
 #include <gtk/gtk.h>
 
 #include "gnoridor-player.h"
-
+#include "gnoridor-define.h"
 
 G_BEGIN_DECLS
 
@@ -53,6 +53,8 @@ void           gnoridor_cell_put_player (GnoridorCell *self, GnoridorPlayer *pla
  * Removes the player from the cell
  */
 void           gnoridor_cell_remove_player (GnoridorCell *self);
+
+void           gnoridor_cell_place_wall (GnoridorCell *self, WallOrientation wall_or);
 
 
 /*

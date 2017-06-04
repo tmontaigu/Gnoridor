@@ -53,7 +53,7 @@ GnoridorBoard *gnoridor_board_new (void);
 gboolean       gnoridor_board_request_move (GnoridorBoard *self, GnoridorPlayer *player, int direction);
 void           gnoridor_board_set_window (GnoridorBoard *self, GtkWidget *window);
 void           gnoridor_board_change_current_player(GnoridorBoard *self);
-
+gboolean       gnoridor_board_can_place_wall (GnoridorBoard *self, GnoridorCell *cell, WallOrientation wall_or);
 G_END_DECLS
 
 #endif

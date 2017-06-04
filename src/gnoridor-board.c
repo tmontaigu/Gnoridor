@@ -49,7 +49,7 @@ gnoridor_board_init (GnoridorBoard *self)
 			self->cells[i][j]->col = j;
 
 			gtk_grid_attach (GTK_GRID (self),
-					 GTK_WIDGET (self->cells[i][j]), j, i, 1,1);
+			GTK_WIDGET (self->cells[i][j]), j, i, 1,1);
 		}
 	}
 
@@ -60,7 +60,7 @@ gnoridor_board_init (GnoridorBoard *self)
 
 
 
-        // Create 2 players
+	// Create 2 players
 	GnoridorPlayer *p = gnoridor_player_new_with_color (BLUE);
 	gnoridor_cell_put_player (self->cells[0][4], p);
 	self->player_cell[0] = self->cells[0][4];
@@ -75,7 +75,7 @@ gnoridor_board_init (GnoridorBoard *self)
 
         // Player 0 is the first one to start
 	self->current_player = self->player[0];
-        self->current_player_index = 0;
+	self->current_player_index = 0;
 
 	self->window = NULL;
 	self->placing_vertical_wall = FALSE;
@@ -117,7 +117,7 @@ gnoridor_board_check_move_validity (GnoridorBoard *self, GnoridorCell *old_cell,
 			return NULL;
 		break;
 	case Down:
-		if ( old_cell->row+1 > 9)
+		if ( old_cell->row+1 >= 9)
                     return NULL;
 		new_cell = self->cells[old_cell->row+1][old_cell->col];
 		if (gnoridor_cell_horizontal_wall(old_cell))
@@ -227,57 +227,95 @@ static int
 count_num(int *visited) {
 	int count = 0;
 	for (int i = 0; i < NUMBER_OF_ROWS * NUMBER_OF_COLS; ++i) {
-		++count;
+		if (visited[i])
+			++count;
+		else
+			printf("%d not visited\n", i);
 	}
 	return count;
 }
 
 gboolean
-gnoridor_board_can_place_wall (GnoridorBoard *self) {
+gnoridor_board_can_place_wall (GnoridorBoard *self, GnoridorCell *cell, WallOrientation wall_or) {
+
+	gnoridor_cell_place_wall(cell, wall_or);
+	if (wall_or == Vertical)
+	{
+		GnoridorCell *below = game_board->cells[cell->row+1][cell->col];
+		gnoridor_cell_place_vertical_wall (below);
+	}
+	else if (wall_or == Horizontal)
+	{
+		GnoridorCell *right = game_board->cells[cell->row][cell->col+1];
+		gnoridor_cell_place_horizontal_wall (right);
+	}
+	
 	GQueue *queue = g_queue_new ();
 	int number_of_cells = NUMBER_OF_ROWS * NUMBER_OF_COLS;
 	int *visited = malloc(sizeof(int) * number_of_cells);
+	int *in_queue = malloc(sizeof(int) * number_of_cells);
+															
 
 	for (int i = 0; i < number_of_cells; ++i) {
 		visited[i] = 0;
+		in_queue[i] = 0;
 	}
 
-	int current_cell = 0;
 	g_queue_push_tail(queue, GINT_TO_POINTER (0));
 
 	while (!g_queue_is_empty (queue)) {
 		int cell_number = GPOINTER_TO_INT (g_queue_pop_head (queue));
-		int row = current_cell / NUMBER_OF_ROWS;
-		int col = current_cell % NUMBER_OF_ROWS;
+		int row = cell_number / NUMBER_OF_ROWS;
+		int col = cell_number % NUMBER_OF_ROWS;
 		visited[cell_number] = 1;
+		printf("Visiting: %d (row: %d, col: %d)\n", cell_number, row, col);
+		printf("Length: %d\n", g_queue_get_length(queue));
+		for (int i = 0; i < NUMBER_OF_ROWS * NUMBER_OF_COLS; ++i) {
+			//printf("%d -> %d\n", i, visited[i]);
+		}
 		GnoridorCell *current_cell = self->cells[row][col];
 
 		if (gnoridor_board_check_move_validity (self, current_cell, Up)) {
 			int position = (row-1) * NUMBER_OF_ROWS + col;
-			if (!visited[position])
+			if (!visited[position] && !in_queue[position]) {
+				printf("up pushing: %d\n", position);
 				g_queue_push_tail (queue, GINT_TO_POINTER (position));
+				in_queue[position] = 1;
+			}
 		}
 
 		if (gnoridor_board_check_move_validity (self, current_cell, Down)) {
 			int position = (row+1) * NUMBER_OF_ROWS + col;
-			if (!visited[position])
+			if (!visited[position] && !in_queue[position]) {
+				printf("down pushing: %d\n", position);
 				g_queue_push_tail (queue, GINT_TO_POINTER (position));
+				in_queue[position] = 1;
+			}
 		}
 
 		if (gnoridor_board_check_move_validity (self, current_cell, Left)) {
 			int position = row * NUMBER_OF_ROWS + (col-1);
-			if (!visited[position])
+			if (!visited[position]&& !in_queue[position]) {
+				printf("left pushing: %d\n", position);
 				g_queue_push_tail (queue, GINT_TO_POINTER (position));
+				in_queue[position] = 1;
+			}
 		}
 
 		if (gnoridor_board_check_move_validity (self, current_cell, Right)) {
 			int position = row * NUMBER_OF_ROWS + (col+1);
-			if (!visited[position])
+			if (!visited[position]&& !in_queue[position])
+			{
+				printf("right pushing: %d\n", position);
 				g_queue_push_tail (queue, GINT_TO_POINTER (position));
+				in_queue[position] = 1;
+			}
 		}
 
 	}
 	free (visited);
+
+	printf("count visited: %d num cells: %d\n", count_num(visited), number_of_cells);
 
 	if (count_num(visited) != number_of_cells) {
 		return FALSE;

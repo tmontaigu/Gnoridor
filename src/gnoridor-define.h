@@ -16,4 +16,7 @@ typedef enum {
 	Not_border
 }Border_type;
 
+typedef enum {
+	Horizontal, Vertical
+}WallOrientation;
 #endif

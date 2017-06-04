@@ -101,86 +101,56 @@ gnoridor_board_set_player_cell(GnoridorBoard *self, int color_id, GnoridorCell *
 	}
 }
 
-
-static GnoridorCell *
-gnoridor_board_check_move_validity (GnoridorBoard *self, GnoridorCell *old_cell,
-                                    int direction)
-{
-	GnoridorCell *new_cell = NULL;
-
-	switch (direction) {
-	case Up:
-		if (old_cell->row-1 < 0)
-			return NULL;
-		new_cell = self->cells[old_cell->row-1][old_cell->col];
-		if (gnoridor_cell_horizontal_wall(new_cell))
-			return NULL;
-		break;
-	case Down:
-		if ( old_cell->row+1 >= 9)
-			return NULL;
-		new_cell = self->cells[old_cell->row+1][old_cell->col];
-		if (gnoridor_cell_horizontal_wall(old_cell))
-			return NULL;
-		break;
-	case Left:
-		if (old_cell->col-1 < 0)
-			return NULL;
-		new_cell = self->cells[old_cell->row][old_cell->col-1];
-		if (gnoridor_cell_vertical_wall(new_cell))
-			return NULL;
-		break;
-	case Right:
-		if (old_cell->col+1 >= 9)
-			return NULL;
-		new_cell = self->cells[old_cell->row][old_cell->col+1];
-		if (gnoridor_cell_vertical_wall(old_cell))
-			return NULL;
-		break;
-	}
-
-	if (gnoridor_cell_is_not_empty (new_cell))
-		new_cell = NULL;
-	return new_cell;
-}
-
-gboolean
+GnoridorCell*
 gnoridor_board_check_direction(GnoridorBoard *self, GnoridorCell *old_cell, int direction) {
 	GnoridorCell *new_cell = NULL;
 	
 	switch (direction) {
 	case Up:
 		if (old_cell->row-1 < 0)
-			return FALSE;
+			return NULL;
 		new_cell = self->cells[old_cell->row-1][old_cell->col];
 		if (gnoridor_cell_horizontal_wall(new_cell))
-			return FALSE;
+			return NULL;
 		break;
 	case Down:
-		if ( old_cell->row+1 >= 9)
-			return FALSE;
+		if (old_cell->row+1 >= 9)
+			return NULL;
 		new_cell = self->cells[old_cell->row+1][old_cell->col];
 		if (gnoridor_cell_horizontal_wall(old_cell))
-			return FALSE;
+			return NULL;
 		break;
 	case Left:
 		if (old_cell->col-1 < 0)
-			return FALSE;
+			return NULL;
 		new_cell = self->cells[old_cell->row][old_cell->col-1];
 		if (gnoridor_cell_vertical_wall(new_cell))
-			return FALSE;
+			return NULL;
 		break;
 	case Right:
 		if (old_cell->col+1 >= 9)
-			return FALSE;
+			return NULL;
 		new_cell = self->cells[old_cell->row][old_cell->col+1];
 		if (gnoridor_cell_vertical_wall(old_cell))
-			return FALSE;
+			return NULL;
 		break;
 	}
 
-	return TRUE;
+	return new_cell;
 }
+
+
+static GnoridorCell *
+gnoridor_board_check_move_validity (GnoridorBoard *self, GnoridorCell *old_cell,
+                                    int direction)
+{
+	GnoridorCell *new_cell = gnoridor_board_check_direction(self, old_cell, direction);
+
+	if (gnoridor_cell_is_not_empty (new_cell))
+		new_cell = NULL;
+	return new_cell;
+}
+
 
 static gboolean
 gnoridor_board_check_win (GnoridorBoard *self, GnoridorPlayer *player)
@@ -290,6 +260,7 @@ gnoridor_board_can_place_wall (GnoridorBoard *self, GnoridorCell *cell, WallOrie
 	int number_of_cells = NUMBER_OF_ROWS * NUMBER_OF_COLS;
 	int *visited = malloc(sizeof(int) * number_of_cells);
 	int *in_queue = malloc(sizeof(int) * number_of_cells);
+	GnoridorCell *neighbour_cell;
 															
 
 	for (int i = 0; i < number_of_cells; ++i) {
@@ -308,32 +279,32 @@ gnoridor_board_can_place_wall (GnoridorBoard *self, GnoridorCell *cell, WallOrie
 		in_queue[cell_number] = 0;
 		GnoridorCell *current_cell = self->cells[row][col];
 
-		if (gnoridor_board_check_direction (self, current_cell, Up)) {
-			int position = (row-1) * NUMBER_OF_ROWS + col;
+		if ( (neighbour_cell = gnoridor_board_check_direction (self, current_cell, Up) )) {
+			int position = neighbour_cell->row * NUMBER_OF_ROWS + neighbour_cell->col;
 			if (!visited[position] && !in_queue[position]) {
 				g_queue_push_tail (queue, GINT_TO_POINTER (position));
 				in_queue[position] = 1;
 			}
 		}
 
-		if (gnoridor_board_check_direction (self, current_cell, Down)) {
-			int position = (row+1) * NUMBER_OF_ROWS + col;
+		if ( (neighbour_cell = gnoridor_board_check_direction (self, current_cell, Down) )) {
+			int position = neighbour_cell->row * NUMBER_OF_ROWS + neighbour_cell->col;
 			if (!visited[position] && !in_queue[position]) {
 				g_queue_push_tail (queue, GINT_TO_POINTER (position));
 				in_queue[position] = 1;
 			}
 		}
 
-		if (gnoridor_board_check_direction (self, current_cell, Left)) {
-			int position = row * NUMBER_OF_ROWS + (col-1);
+		if ( (neighbour_cell = gnoridor_board_check_direction (self, current_cell, Left) )) {
+			int position = neighbour_cell->row * NUMBER_OF_ROWS + neighbour_cell->col;
 			if (!visited[position]&& !in_queue[position]) {
 				g_queue_push_tail (queue, GINT_TO_POINTER (position));
 				in_queue[position] = 1;
 			}
 		}
 
-		if (gnoridor_board_check_direction (self, current_cell, Right)) {
-			int position = row * NUMBER_OF_ROWS + (col+1);
+		if ( (neighbour_cell = gnoridor_board_check_direction (self, current_cell, Right) )) {
+			int position = neighbour_cell->row * NUMBER_OF_ROWS + neighbour_cell->col;
 			if (!visited[position]&& !in_queue[position])
 			{
 				g_queue_push_tail (queue, GINT_TO_POINTER (position));

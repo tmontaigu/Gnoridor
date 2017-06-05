@@ -73,6 +73,24 @@ gnoridor_cell_place_wall(GnoridorCell *self, WallOrientation wall_or)
 }
 
 void
+gnoridor_cell_place_temporary_wall(GnoridorCell *self, WallOrientation wall_or)
+{
+	if (wall_or == Horizontal)
+		self->horizontal_wall = TRUE;
+	else if (wall_or == Vertical)
+		self->vertical_wall = TRUE;
+}
+void
+gnoridor_cell_remove_temporary_wall(GnoridorCell *self, WallOrientation wall_or)
+{
+	if (wall_or == Horizontal)
+		self->horizontal_wall = FALSE;
+	else if (wall_or == Vertical)
+		self->vertical_wall = FALSE;
+}
+
+
+void
 gnoridor_cell_place_vertical_wall (GnoridorCell *self)
 {
 	self->vertical_wall = TRUE;

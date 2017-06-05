@@ -142,18 +142,20 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 			show_dialog_window("You cannot place a wall here !");
 			return FALSE;
 		}
-		gnoridor_cell_place_vertical_wall (cell);
-		printf("Can place wall ? %d\n", gnoridor_board_can_place_wall (game_board, cell, Vertical));
+		if (gnoridor_board_can_place_wall (game_board, cell, Vertical))
+		{
+      gnoridor_board_place_wall (game_board, cell, Vertical);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle), FALSE);
 
-		// Also place a wall on the cell below
-		GnoridorCell *below = game_board->cells[cell->row+1][cell->col];
-		gnoridor_cell_place_vertical_wall (below);
-
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle), FALSE);
-
-		game_board->current_player->number_of_walls--;
-		gnoridor_board_change_current_player (game_board);
-		return FALSE; // Player's turn is over
+			game_board->current_player->number_of_walls--;
+			gnoridor_board_change_current_player (game_board);
+			return FALSE; // Player's turn is over
+		}
+    else
+    {
+      show_dialog_window ("You cannot place wall in a way that splits the board\n");
+      return FALSE;
+    }
 	}
 	// Horizontal wall
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle)))

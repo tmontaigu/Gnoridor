@@ -17,4 +17,4 @@ sources = ['src/main.c',
            'src/gnoridor-player.h',]
 
 
-executable('Gnoridor', sources, gnresources,dependencies : gtkdep)
+executable('Gnoridor', sources, gnresources,dependencies : gtkdep, install : true)

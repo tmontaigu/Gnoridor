@@ -15,6 +15,7 @@ gnoridor_cell_new (void)
 static void
 gnoridor_cell_class_init (GnoridorCellClass*class)
 {
+
 }
 
 static void
@@ -61,11 +62,39 @@ gnoridor_cell_get_player_on_cell (GnoridorCell *self) {
 }
 
 void
+gnoridor_cell_place_wall(GnoridorCell *self, WallOrientation wall_or)
+{
+	if (wall_or == Horizontal)
+		self->horizontal_wall = TRUE;
+	else if (wall_or == Vertical)
+		self->vertical_wall = TRUE;
+	gtk_widget_queue_draw ( GTK_WIDGET (self));
+}
+
+void
+gnoridor_cell_place_temporary_wall(GnoridorCell *self, WallOrientation wall_or)
+{
+	if (wall_or == Horizontal)
+		self->horizontal_wall = TRUE;
+	else if (wall_or == Vertical)
+		self->vertical_wall = TRUE;
+}
+void
+gnoridor_cell_remove_temporary_wall(GnoridorCell *self, WallOrientation wall_or)
+{
+	if (wall_or == Horizontal)
+		self->horizontal_wall = FALSE;
+	else if (wall_or == Vertical)
+		self->vertical_wall = FALSE;
+}
+
+
+void
 gnoridor_cell_place_vertical_wall (GnoridorCell *self)
 {
 	self->vertical_wall = TRUE;
  	// Refresh the cell
-	gtk_widget_queue_draw(GTK_WIDGET (self));
+	gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
 void

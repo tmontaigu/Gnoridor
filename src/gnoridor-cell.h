@@ -4,7 +4,7 @@
 #include <gtk/gtk.h>
 
 #include "gnoridor-player.h"
-
+#include "gnoridor-define.h"
 
 G_BEGIN_DECLS
 
@@ -23,8 +23,8 @@ struct _GnoridorCell
 	/* Other members, including private data. */
 	GnoridorPlayer *player_on_cell;
 
-        gboolean vertical_wall;
-        gboolean horizontal_wall;
+	gboolean vertical_wall;
+	gboolean horizontal_wall;
 
 	int row;
 	int col;
@@ -54,6 +54,9 @@ void           gnoridor_cell_put_player (GnoridorCell *self, GnoridorPlayer *pla
  */
 void           gnoridor_cell_remove_player (GnoridorCell *self);
 
+void           gnoridor_cell_place_wall (GnoridorCell *self, WallOrientation wall_or);
+void           gnoridor_cell_place_temporary_wall (GnoridorCell *self, WallOrientation wall_or);
+void           gnoridor_cell_remove_temporary_wall(GnoridorCell *self, WallOrientation wall_or);
 
 /*
  * Places a vertical wall on the right side of the cell itself and the one

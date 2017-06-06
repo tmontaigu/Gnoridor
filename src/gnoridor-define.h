@@ -1,7 +1,7 @@
 #ifndef GNORIDOR_DEFINE_H
 #define GNORIDOR_DEFINE_H
 
-#define NUMBER_OF_WALLS 4
+#define NUMBER_OF_WALLS 9
 #define NUMBER_OF_ROWS 9
 #define NUMBER_OF_COLS 9
 
@@ -16,4 +16,7 @@ typedef enum {
 	Not_border
 }Border_type;
 
+typedef enum {
+	Horizontal, Vertical
+}WallOrientation;
 #endif

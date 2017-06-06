@@ -14,12 +14,12 @@ void draw_horizontal_wall(cairo_t *cr, guint width, guint height, int border) {
 	double end_y   = height;
 
 	if (border == Left_border || border == Up_left_corner)
-		start_x += 5;
+	  start_x += 5;
 	if (border == Right_border || border == Up_right_corner)
-		end_x -= 5;
+	  end_x -= 5;
 	if (border == Bottom_border || border == Bottom_left_corner ||
-			border == Bottom_right_corner)
-		return;
+	    border == Bottom_right_corner)
+	  return;
 	cairo_set_source_rgb(cr, 1, 0, 0);
 	cairo_set_line_width(cr, 7);
 
@@ -136,23 +136,26 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 		}
 
 		if (gnoridor_cell_get_border_type (cell) == Bottom_border ||
-			gnoridor_cell_get_border_type (cell) == Right_border  ||
-			cell->vertical_wall)
+		    gnoridor_cell_get_border_type (cell) == Right_border  ||
+		    cell->vertical_wall)
 		{
 			show_dialog_window("You cannot place a wall here !");
 			return FALSE;
 		}
-		gnoridor_cell_place_vertical_wall (cell);
+		if (gnoridor_board_can_place_wall (game_board, cell, Vertical))
+		{
+      gnoridor_board_place_wall (game_board, cell, Vertical);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle), FALSE);
 
-		// Also place a wall on the cell below
-		GnoridorCell *below = game_board->cells[cell->row+1][cell->col];
-		gnoridor_cell_place_vertical_wall (below);
-
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle), FALSE);
-
-		game_board->current_player->number_of_walls--;
-		gnoridor_board_change_current_player (game_board);
-		return FALSE; // Player's turn is over
+			game_board->current_player->number_of_walls--;
+			gnoridor_board_change_current_player (game_board);
+			return FALSE; // Player's turn is over
+		}
+    else
+    {
+      show_dialog_window ("You cannot place wall in a way that splits the board\n");
+      return FALSE;
+    }
 	}
 	// Horizontal wall
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle)))
@@ -200,10 +203,10 @@ draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data) {
 
 	int offset = 5;
 	cairo_rectangle(cr,
-					offset,
-					offset,
-					board_allocation->width - 2*offset,
-					board_allocation->height - 2*offset);
+			offset,
+			offset,
+			board_allocation->width - 2*offset,
+			board_allocation->height - 2*offset);
 
 	cairo_set_line_width(cr, 4);
 	cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -223,10 +226,10 @@ void show_dialog_window(char *text)
 {
 	GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
 	GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (game_board->window),
-					 flags,
-					 GTK_MESSAGE_ERROR,
-					 GTK_BUTTONS_CLOSE,
-					 "%s", text);
+						    flags,
+						    GTK_MESSAGE_ERROR,
+						    GTK_BUTTONS_CLOSE,
+						    "%s", text);
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 

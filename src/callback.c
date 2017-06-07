@@ -14,12 +14,12 @@ void draw_horizontal_wall(cairo_t *cr, guint width, guint height, int border) {
 	double end_y   = height;
 
 	if (border == Left_border || border == Up_left_corner)
-	  start_x += 5;
+	  	start_x += 5;
 	if (border == Right_border || border == Up_right_corner)
-	  end_x -= 5;
+	  	end_x -= 5;
 	if (border == Bottom_border || border == Bottom_left_corner ||
 	    border == Bottom_right_corner)
-	  return;
+		return;
 	cairo_set_source_rgb(cr, 1, 0, 0);
 	cairo_set_line_width(cr, 7);
 
@@ -99,7 +99,7 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 	if (gnoridor_cell_is_not_empty (GNORIDOR_CELL (widget)))
 	{
 		gnoridor_player_color (gnoridor_cell_get_player_on_cell( GNORIDOR_CELL(widget)),
-									 cr);
+							   cr);
 		draw_player(cr, width, height, size);
 	}
 
@@ -192,7 +192,7 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 	}
 
 	if (cell->player_on_cell && game_board->current_player == cell->player_on_cell)
-            gtk_popover_popup (GTK_POPOVER (cell->player_on_cell->actions));
+		gtk_popover_popup (GTK_POPOVER (cell->player_on_cell->actions));
 	return FALSE;
 }
 

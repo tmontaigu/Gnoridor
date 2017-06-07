@@ -62,10 +62,10 @@ activate (GtkApplication *app,
 
 	GtkWidget *game_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-        // TODO: change ugly global variable to a GnoridorBoard member
-        char label_text[25];
-        sprintf(label_text, "Current player:\nBlue");
-        current_player_label = gtk_label_new (label_text);
+	// TODO: change ugly global variable to a GnoridorBoard member
+	char label_text[25];
+	sprintf(label_text, "Current player:\nBlue");
+	current_player_label = gtk_label_new (label_text);
 
 
 	GtkWidget *place_hwall_button, *place_vwall_button;

@@ -144,18 +144,18 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 		}
 		if (gnoridor_board_can_place_wall (game_board, cell, Vertical))
 		{
-      gnoridor_board_place_wall (game_board, cell, Vertical);
+      		gnoridor_board_place_wall (game_board, cell, Vertical);
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle), FALSE);
 
 			game_board->current_player->number_of_walls--;
 			gnoridor_board_change_current_player (game_board);
 			return FALSE; // Player's turn is over
 		}
-    else
-    {
-      show_dialog_window ("You cannot place wall in a way that splits the board\n");
-      return FALSE;
-    }
+		else
+		{
+			show_dialog_window ("You cannot place wall in a way that splits the board\n");
+			return FALSE;
+		}
 	}
 	// Horizontal wall
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle)))
@@ -174,17 +174,21 @@ click_cell_callback (GnoridorCell *cell, gpointer data) {
 			show_dialog_window("You cannot place a wall here !");
 			return FALSE;
 		}
-		gnoridor_cell_place_horizontal_wall (cell);
 
-		// Also place a wall on the cell on the right
-		GnoridorCell *right = game_board->cells[cell->row][cell->col+1];
-		gnoridor_cell_place_horizontal_wall (right);
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle), FALSE);
+		if (gnoridor_board_can_place_wall (game_board, cell, Horizontal))
+		{
+			gnoridor_board_place_wall (game_board, cell, Horizontal);
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (game_board->hwall_toggle), FALSE);
 
-		game_board->current_player->number_of_walls--;
-		printf("g: %d\n", game_board->current_player->number_of_walls);
-		gnoridor_board_change_current_player (game_board);
-		return FALSE; // Player's turn is over
+			game_board->current_player->number_of_walls--;
+			gnoridor_board_change_current_player (game_board);
+			return FALSE;
+		}
+		else
+		{
+			show_dialog_window ("You cannot place wall in a way that splits the board\n");
+			return FALSE;
+		}
 	}
 
 	if (cell->player_on_cell && game_board->current_player == cell->player_on_cell)

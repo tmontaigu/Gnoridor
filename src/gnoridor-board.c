@@ -31,6 +31,27 @@ gnoridor_board_class_init (GnoridorBoardClass *class)
 }
 
 static void
+gnoridor_board_set_players(GnoridorBoard *self)
+{
+  // Create 2 players
+	GnoridorPlayer *p = gnoridor_player_new_with_color (BLUE);
+	gnoridor_cell_put_player (self->cells[0][4], p);
+	self->player_cell[0] = self->cells[0][4];
+	self->player[0] = p;
+	p->number_of_walls = NUMBER_OF_WALLS / self->number_of_player;
+
+	p = gnoridor_player_new_with_color (RED);
+	gnoridor_cell_put_player (self->cells[8][4], p);
+	self->player_cell[1] = self->cells[8][4];
+	self->player[1] = p;
+	p->number_of_walls = NUMBER_OF_WALLS / self->number_of_player;
+
+  // Player 0 is the first one to start
+	self->current_player = self->player[0];
+	self->current_player_index = 0;
+}
+
+static void
 gnoridor_board_init (GnoridorBoard *self)
 {
 	g_signal_connect (G_OBJECT (self), "notify_player",
@@ -53,32 +74,35 @@ gnoridor_board_init (GnoridorBoard *self)
 		}
 	}
 
-
 	self->number_of_player = 2;
 	self->player = malloc (sizeof * self->player * self->number_of_player);
 	self->player_cell = malloc (sizeof * self->player_cell * self->number_of_player);
 
-
-
-	// Create 2 players
-	GnoridorPlayer *p = gnoridor_player_new_with_color (BLUE);
-	gnoridor_cell_put_player (self->cells[0][4], p);
-	self->player_cell[0] = self->cells[0][4];
-	self->player[0] = p;
-	p->number_of_walls = NUMBER_OF_WALLS / self->number_of_player;
-
-	p = gnoridor_player_new_with_color (RED);
-	gnoridor_cell_put_player (self->cells[8][4], p);
-	self->player_cell[1] = self->cells[8][4];
-	self->player[1] = p;
-	p->number_of_walls = NUMBER_OF_WALLS / self->number_of_player;
-
-        // Player 0 is the first one to start
-	self->current_player = self->player[0];
-	self->current_player_index = 0;
+  gnoridor_board_set_players (self);
 
 	self->window = NULL;
 	self->placing_vertical_wall = FALSE;
+}
+
+//TODO hmm check that every thing is done
+//TODO Block mouvement when someone wins or automatically restart game
+void
+gnoridor_board_reset (GnoridorBoard *self)
+{
+	for (int i = 0; i < NUMBER_OF_ROWS; i++)
+    {
+      for (int j = 0; j < NUMBER_OF_COLS; j++)
+        {
+          gnoridor_cell_remove_walls (self->cells[i][j]);
+        }
+    }
+
+  for (int i = 0; i < self->number_of_player; ++i)
+  {
+    gnoridor_cell_remove_player(self->player_cell[i]);
+  }
+
+  gnoridor_board_set_players (self);
 }
 
 

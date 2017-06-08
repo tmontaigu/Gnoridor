@@ -88,6 +88,13 @@ gnoridor_cell_remove_temporary_wall(GnoridorCell *self, WallOrientation wall_or)
 		self->vertical_wall = FALSE;
 }
 
+void
+gnoridor_cell_remove_walls(GnoridorCell *self)
+{
+  self->horizontal_wall = FALSE;
+  self->vertical_wall = FALSE;
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
 
 void
 gnoridor_cell_place_vertical_wall (GnoridorCell *self)

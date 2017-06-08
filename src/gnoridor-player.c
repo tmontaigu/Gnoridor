@@ -1,4 +1,4 @@
-#include "gnoridor-player.h"
+/* #include "gnoridor-player.h" */
 #include "gnoridor-cell.h"
 #include "callback.h"
 

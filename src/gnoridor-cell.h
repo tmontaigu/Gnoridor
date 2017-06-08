@@ -57,6 +57,7 @@ void           gnoridor_cell_remove_player (GnoridorCell *self);
 void           gnoridor_cell_place_wall (GnoridorCell *self, WallOrientation wall_or);
 void           gnoridor_cell_place_temporary_wall (GnoridorCell *self, WallOrientation wall_or);
 void           gnoridor_cell_remove_temporary_wall(GnoridorCell *self, WallOrientation wall_or);
+void           gnoridor_cell_remove_walls(GnoridorCell *self);
 
 /*
  * Places a vertical wall on the right side of the cell itself and the one

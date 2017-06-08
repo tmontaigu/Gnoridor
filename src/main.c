@@ -21,6 +21,14 @@
 #include "gnoridor-board.h"
 #include "callback.h"
 
+void
+new_game_callback (GtkWidget *new_game_bt, gpointer data)
+{
+  GnoridorBoard *board = data;
+  gnoridor_board_reset (board);
+}
+
+
 static void
 activate (GtkApplication *app,
           gpointer        user_data)
@@ -44,21 +52,23 @@ activate (GtkApplication *app,
 	// Replace the title bar with that new shiny header bar
 	gtk_window_set_titlebar (GTK_WINDOW (window), header_bar);
 
-
 	// Draw board limit
 	GtkWidget *board_limit = gtk_drawing_area_new ();
 	g_signal_connect (G_OBJECT (board_limit), "draw",
-	 				  G_CALLBACK (draw_board_limit), NULL);
+                    G_CALLBACK (draw_board_limit), NULL);
 
 	board = gnoridor_board_new ();
 	gnoridor_board_set_window (board, window);
 	game_board = board; // Set the global variable
 
+  GtkWidget *new_game_bt = gtk_button_new_with_label ("New Game");
+  g_signal_connect (new_game_bt, "clicked", G_CALLBACK (new_game_callback), board);
+
+  gtk_container_add (GTK_CONTAINER (header_bar), new_game_bt);
 
 	GtkWidget *overlay = gtk_overlay_new ();
 	gtk_overlay_add_overlay (GTK_OVERLAY (overlay), board_limit);
 	gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (board));
-
 
 	GtkWidget *game_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 

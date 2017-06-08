@@ -37,7 +37,7 @@ struct _GnoridorBoard
 	GnoridorCell **player_cell;
 
 	gboolean placing_vertical_wall;
-    gboolean placing_horizontal_wall;
+  gboolean placing_horizontal_wall;
 
 	GtkWidget *window;
 	GtkWidget *vwall_toggle;
@@ -55,6 +55,7 @@ void           gnoridor_board_set_window (GnoridorBoard *self, GtkWidget *window
 void           gnoridor_board_change_current_player(GnoridorBoard *self);
 gboolean       gnoridor_board_can_place_wall (GnoridorBoard *self, GnoridorCell *cell, WallOrientation wall_or);
 void           gnoridor_board_place_wall (GnoridorBoard *self, GnoridorCell *cell, WallOrientation wall_or);
+void           gnoridor_board_reset (GnoridorBoard *self);
 G_END_DECLS
 
 #endif

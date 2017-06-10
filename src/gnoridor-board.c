@@ -272,12 +272,12 @@ gnoridor_board_place_wall (GnoridorBoard *self, GnoridorCell *cell, WallOrientat
 	gnoridor_cell_place_wall(cell, wall_or);
 	if (wall_or == Vertical)
 	{
-		GnoridorCell *below = game_board->cells[cell->row+1][cell->col];
+		GnoridorCell *below = self->cells[cell->row+1][cell->col];
 		gnoridor_cell_place_wall (below, wall_or);
 	}
 	else if (wall_or == Horizontal)
 	{
-		GnoridorCell *right = game_board->cells[cell->row][cell->col+1];
+		GnoridorCell *right = self->cells[cell->row][cell->col+1];
 		gnoridor_cell_place_wall (right, wall_or);
 	}
 }
@@ -289,12 +289,12 @@ gnoridor_board_place_temporary_wall (GnoridorBoard *self, GnoridorCell *cell, Wa
  	gnoridor_cell_place_temporary_wall(cell, wall_or);
 	if (wall_or == Vertical)
 	{
-		GnoridorCell *below = game_board->cells[cell->row+1][cell->col];
+		GnoridorCell *below = self->cells[cell->row+1][cell->col];
 		gnoridor_cell_place_temporary_wall (below, wall_or);
 	}
 	else if (wall_or == Horizontal)
 	{
-		GnoridorCell *right = game_board->cells[cell->row][cell->col+1];
+		GnoridorCell *right = self->cells[cell->row][cell->col+1];
 		gnoridor_cell_place_temporary_wall (right, wall_or);
 	}
 }
@@ -306,12 +306,12 @@ gnoridor_board_remove_temporary_wall (GnoridorBoard *self, GnoridorCell *cell, W
 	gnoridor_cell_remove_temporary_wall(cell, wall_or);
 	if (wall_or == Vertical)
 	{
-		GnoridorCell *below = game_board->cells[cell->row+1][cell->col];
+		GnoridorCell *below = self->cells[cell->row+1][cell->col];
 		gnoridor_cell_remove_temporary_wall (below, wall_or);
 	}
 	else if (wall_or == Horizontal)
 	{
-		GnoridorCell *right = game_board->cells[cell->row][cell->col+1];
+		GnoridorCell *right = self->cells[cell->row][cell->col+1];
 		gnoridor_cell_remove_temporary_wall (right, wall_or);
 	}
 }

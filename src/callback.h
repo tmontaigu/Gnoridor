@@ -37,7 +37,7 @@ gboolean player_changed_callback(GnoridorBoard *board, gpointer data);
 
 /*
  * callbacks connected to their respective buttons
- * They set a boolean in the game_board
+ * They set a boolean in the game board
  * so the click_cell callback can check if the player wants to place a wall
  */
 void prepare_vertical_wall_callback(GtkWidget *button, gpointer data);

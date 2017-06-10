@@ -5,6 +5,25 @@
 G_DEFINE_TYPE (GnoridorCell, gnoridor_cell, GTK_TYPE_DRAWING_AREA);
 
 
+/*
+ * Callback where we do all the drawing stuff.
+ * The cell draws itself, draws the player icon,
+ * draws the walls
+ *
+ */
+static gboolean gnoridor_cell_draw(GtkWidget *widget, cairo_t *cr, gpointer data);
+
+ /*
+ * Callback when the user clicks on a cell
+ * Behaviour :
+ *  if the action is to place a wall, this callback handles the different calls
+ *  to place them.
+ *
+ *  if a player is on the cell:
+ *    Show the popover with the possible directions to move the player.
+ */
+static gboolean gnoridor_cell_click(GnoridorCell *self, gpointer data);
+
 
 GnoridorCell *
 gnoridor_cell_new (void)
@@ -24,9 +43,9 @@ gnoridor_cell_init (GnoridorCell *self)
 	gtk_widget_add_events (GTK_WIDGET (self), GDK_BUTTON_PRESS_MASK);
 
 	g_signal_connect (G_OBJECT   (self), "draw",
-					  G_CALLBACK (draw_callback), NULL);
+					  G_CALLBACK (gnoridor_cell_draw), NULL);
 	g_signal_connect (G_OBJECT   (self), "button_press_event",
-					  G_CALLBACK (click_cell_callback), NULL);
+					  G_CALLBACK (gnoridor_cell_click), NULL);
 
 	self->player_on_cell = NULL;
 	self->vertical_wall = FALSE;
@@ -159,4 +178,185 @@ gnoridor_cell_is_border (GnoridorCell *self)
 	   (self->col > 0 && self->col < NUMBER_OF_COLS - 1))
 		return FALSE;
 	return TRUE;
+}
+
+static gboolean
+gnoridor_cell_click(GnoridorCell *self, gpointer data) {
+	// Vertical wall
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle)))
+	{
+		if (game_board->current_player->number_of_walls <= 0)
+		{
+			show_dialog_window("You don't have any wall left !");
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle), FALSE);
+			return FALSE;
+		}
+
+		if (gnoridor_cell_get_border_type (self) == Bottom_border ||
+		    gnoridor_cell_get_border_type (self) == Right_border  ||
+		    self->vertical_wall)
+		{
+			show_dialog_window("You cannot place a wall here !");
+			return FALSE;
+		}
+		if (gnoridor_board_can_place_wall (game_board, self, Vertical))
+		{
+      		gnoridor_board_place_wall (game_board, self, Vertical);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle), FALSE);
+
+			game_board->current_player->number_of_walls--;
+			gnoridor_board_change_current_player (game_board);
+			return FALSE; // Player's turn is over
+		}
+		else
+		{
+			show_dialog_window ("You cannot place wall in a way that splits the board\n");
+			return FALSE;
+		}
+	}
+	// Horizontal wall
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle)))
+	{
+		if (game_board->current_player->number_of_walls <= 0)
+		{
+			show_dialog_window("You don't have any wall left !");
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle), FALSE);
+			return FALSE;
+		}
+
+		if (gnoridor_cell_get_border_type (self) == Bottom_border ||
+			gnoridor_cell_get_border_type (self) == Right_border  ||
+			self->horizontal_wall)
+		{
+			show_dialog_window("You cannot place a wall here !");
+			return FALSE;
+		}
+
+		if (gnoridor_board_can_place_wall (game_board, self	, Horizontal))
+		{
+			gnoridor_board_place_wall (game_board, self, Horizontal);
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (game_board->hwall_toggle), FALSE);
+
+			game_board->current_player->number_of_walls--;
+			gnoridor_board_change_current_player (game_board);
+			return FALSE;
+		}
+		else
+		{
+			show_dialog_window ("You cannot place wall in a way that splits the board\n");
+			return FALSE;
+		}
+	}
+
+	if (self->player_on_cell && game_board->current_player == self->player_on_cell)
+		gtk_popover_popup (GTK_POPOVER (self->player_on_cell->actions));
+	return FALSE;
+}
+
+static void draw_horizontal_wall(cairo_t *cr, guint width, guint height, int border) {
+	double start_x = 0;
+	double start_y = height;
+	double end_x   = width;
+	double end_y   = height;
+
+	if (border == Left_border || border == Up_left_corner)
+	  	start_x += 5;
+	if (border == Right_border || border == Up_right_corner)
+	  	end_x -= 5;
+	if (border == Bottom_border || border == Bottom_left_corner ||
+	    border == Bottom_right_corner)
+		return;
+	cairo_set_source_rgb(cr, 1, 0, 0);
+	cairo_set_line_width(cr, 7);
+
+	cairo_move_to (cr, start_x, start_y);
+	cairo_line_to (cr, end_x, end_y);
+
+	cairo_stroke(cr);
+}
+
+static void draw_vertical_wall(cairo_t *cr, guint width, guint height, int border) {
+	double start_x = width;
+	double start_y =  0;
+	double end_x   = width;
+	double end_y   = height;
+
+	if (border == Up_border || border == Up_left_corner)
+		start_y += 5;
+	if (border == Bottom_border || border == Bottom_left_corner)
+		end_y -= 5;
+	if (border == Right_border || border == Bottom_right_corner ||
+            border == Up_right_corner)
+		return;
+
+
+	cairo_set_source_rgb(cr, 1, 0, 0);
+	cairo_set_line_width(cr, 7);
+
+	cairo_move_to (cr, start_x, start_y);
+	cairo_line_to (cr, end_x, end_y);
+
+	cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
+	cairo_stroke(cr);
+}
+
+
+static void draw_cell(cairo_t *cr, guint width, guint height, guint size)
+{
+	double x_center = width / 2;
+	double y_center = height / 2;
+
+	cairo_set_source_rgb(cr, 0, 0, 0);
+	cairo_set_line_width(cr, 4.5);
+
+	cairo_rectangle(cr, x_center - size / 4,
+                        y_center - size / 4,
+                        size / 2 ,
+                        size / 2);
+
+	cairo_set_line_width(cr, 4);
+	cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
+	cairo_stroke(cr);
+}
+
+static void draw_player(cairo_t *cr, guint width, guint height, guint size) {
+	double radius = size / 8;
+	double x_center = width / 2;
+	double y_center = height / 2;
+
+	cairo_arc(cr, x_center, y_center, radius, 0, 2 * 3.1415);
+	cairo_stroke_preserve(cr);
+	cairo_fill(cr);
+}
+
+static gboolean
+gnoridor_cell_draw (GtkWidget *widget, cairo_t *cr, gpointer data)
+{
+	GtkAllocation *cell_allocation = g_new (GtkAllocation, 1);
+	gtk_widget_get_allocation (widget, cell_allocation);
+
+	double width = cell_allocation->width;
+	double height = cell_allocation->height;
+	double size = width < height ? 1.25*width : 1.25*height;
+
+
+	draw_cell(cr, width, height, size);
+	if (gnoridor_cell_is_not_empty (GNORIDOR_CELL (widget)))
+	{
+		gnoridor_player_color (gnoridor_cell_get_player_on_cell( GNORIDOR_CELL(widget)),
+							   cr);
+		draw_player(cr, width, height, size);
+	}
+
+	if (gnoridor_cell_horizontal_wall(GNORIDOR_CELL (widget)))
+	{
+		draw_horizontal_wall (cr, cell_allocation->width, cell_allocation->height,
+				      gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
+	}
+	if (gnoridor_cell_vertical_wall(GNORIDOR_CELL (widget)))
+	{
+		draw_vertical_wall (cr, cell_allocation->width, cell_allocation->height,
+				    gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
+	}
+	return FALSE;
 }

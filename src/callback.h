@@ -9,29 +9,12 @@
 #include "gnoridor-define.h"
 
 GnoridorBoard *game_board;
-/*
- * Callback where we do all the drawing stuff.
- * The cell draws itself, draws the player icon,
- * draws the walls
- *
- */
-gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data);
 
 /*
  * function that draws the rectangle which represent the border of the board
  */
 gboolean draw_board_limit(GtkWidget *widget, cairo_t *cr, gpointer data);
 
-/*
- * Callback when the user clicks on a cell
- * Behaviour :
- *  if the action is to place a wall, this callback handles the different calls
- *  to place them.
- *
- *  if a player is on the cell:
- *    Show the popover with the possible directions to move the player.
- */
-gboolean click_cell_callback(GnoridorCell *cell, gpointer data);
 
 gboolean player_changed_callback(GnoridorBoard *board, gpointer data);
 

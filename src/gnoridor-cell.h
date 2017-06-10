@@ -118,6 +118,8 @@ gboolean       gnoridor_cell_is_border (GnoridorCell *self);
  */
 int            gnoridor_cell_get_border_type (GnoridorCell *self);
 
+
+
 G_END_DECLS
 
 #endif /* GNORIDOR_CELL_H */

@@ -288,7 +288,7 @@ void gnoridor_board_change_current_player(GnoridorBoard* self) {
 		gtk_widget_set_sensitive(GTK_WIDGET (self->vwall_toggle), FALSE);
 	}
 
-	gtk_label_set_text (GTK_LABEL (current_player_label), label_text);
+	gtk_label_set_text (GTK_LABEL (self->curr_player_label), label_text);
 }
 
 int

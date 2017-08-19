@@ -8,7 +8,6 @@
 
 
 int notify_player_signal;
-GtkWidget *current_player_label;
 G_BEGIN_DECLS
 
 
@@ -42,6 +41,7 @@ struct _GnoridorBoard
 	GtkWidget *window;
 	GtkWidget *vwall_toggle;
 	GtkWidget *hwall_toggle;
+	GtkWidget *curr_player_label;
 };
 
 

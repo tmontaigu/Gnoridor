@@ -1,6 +1,7 @@
 #include "gnoridor-board.h"
 #include "gnoridor-player.h"
 #include "callback.h"
+#include "gnoridor-define.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -11,29 +12,48 @@ G_DEFINE_TYPE (GnoridorBoard, gnoridor_board, GTK_TYPE_GRID);
 GnoridorBoard *
 gnoridor_board_new (void)
 {
-    return g_object_new (GNORIDOR_TYPE_BOARD, NULL);
+	return g_object_new (GNORIDOR_TYPE_BOARD, NULL);
 }
 
 static void
 gnoridor_board_class_init (GnoridorBoardClass *class)
 {
 	notify_player_signal = g_signal_newv("notify_player",
-                            G_TYPE_FROM_CLASS (class),
-                            G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-                            NULL /* closure */,
-                            NULL /* accumulator */,
-                            NULL /* accumulator data */,
-                            NULL /* C marshaller */,
-                            G_TYPE_NONE /* return_type */,
-                            0     /* n_params */,
-                            NULL  /* param_types */);
+										G_TYPE_FROM_CLASS (class),
+										G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+										NULL /* closure */,
+										NULL /* accumulator */,
+										NULL /* accumulator data */,
+										NULL /* C marshaller */,
+										G_TYPE_NONE /* return_type */,
+										0     /* n_params */,
+										NULL  /* param_types */);
 	printf("gnoridor_board_class_init\n");
 }
 
 static void
+connect_player_buttons(GnoridorBoard *self, GnoridorPlayer *player)
+{
+	//TODO: store that ptr somewhere to free it
+	PlayerButtonCb *data = malloc(sizeof(PlayerButtonCb));
+	data->player = player;
+	data->board = self;
+
+	g_signal_connect (G_OBJECT (player->buttons[Up]), "clicked",
+					  G_CALLBACK (up_button_callback), data);
+	g_signal_connect (G_OBJECT (player->buttons[Down]), "clicked",
+					  G_CALLBACK (down_button_callback), data);
+	g_signal_connect (G_OBJECT (player->buttons[Left]), "clicked",
+					  G_CALLBACK (left_button_callback), data);
+	g_signal_connect (G_OBJECT (player->buttons[Right]), "clicked",
+					  G_CALLBACK (right_button_callback), data);
+}
+
+
+static void
 gnoridor_board_set_players(GnoridorBoard *self)
 {
-  // Create 2 players
+	// Create 2 players
 	GnoridorPlayer *p = gnoridor_player_new_with_color (BLUE);
 	gnoridor_cell_put_player (self->cells[0][4], p);
 	self->player_cell[0] = self->cells[0][4];
@@ -46,9 +66,14 @@ gnoridor_board_set_players(GnoridorBoard *self)
 	self->player[1] = p;
 	p->number_of_walls = NUMBER_OF_WALLS / self->number_of_player;
 
-  // Player 0 is the first one to start
+	// Player 0 is the first one to start
 	self->current_player = self->player[0];
 	self->current_player_index = 0;
+
+	for (int i = 0; i < self->number_of_player; ++i)
+	{
+		connect_player_buttons (self, self->player[i]);
+	}
 }
 
 static void
@@ -90,19 +115,20 @@ void
 gnoridor_board_reset (GnoridorBoard *self)
 {
 	for (int i = 0; i < NUMBER_OF_ROWS; i++)
-    {
-      for (int j = 0; j < NUMBER_OF_COLS; j++)
-        {
-          gnoridor_cell_remove_walls (self->cells[i][j]);
-        }
-    }
+	{
+		for (int j = 0; j < NUMBER_OF_COLS; j++)
+		{
+			gnoridor_cell_remove_walls (self->cells[i][j]);
+		}
 
-  for (int i = 0; i < self->number_of_player; ++i)
-  {
-    gnoridor_cell_remove_player(self->player_cell[i]);
-  }
+	}
 
-  gnoridor_board_set_players (self);
+	for (int i = 0; i < self->number_of_player; ++i)
+	{
+		gnoridor_cell_remove_player(self->player_cell[i]);
+	}
+
+	gnoridor_board_set_players (self);
 }
 
 
@@ -121,7 +147,7 @@ gnoridor_board_set_player_cell(GnoridorBoard *self, int color_id, GnoridorCell *
 {
 	for (int i = 0; i < self->number_of_player; i++) {
 		if (self->player[i]->id == color_id)
-                    self->player_cell[i] = new_cell;
+			self->player_cell[i] = new_cell;
 	}
 }
 
@@ -166,7 +192,7 @@ gnoridor_board_check_direction(GnoridorBoard *self, GnoridorCell *old_cell, int 
 
 static GnoridorCell *
 gnoridor_board_check_move_validity (GnoridorBoard *self, GnoridorCell *old_cell,
-                                    int direction)
+									int direction)
 {
 	GnoridorCell *new_cell = gnoridor_board_check_direction(self, old_cell, direction);
 
@@ -201,8 +227,8 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 
 	GnoridorCell *old_cell = gnoridor_board_get_player_cell (self, player->id);
 	GnoridorCell *new_cell = gnoridor_board_check_move_validity (self,
-                                                                     old_cell,
-                                                                     direction);
+																old_cell,
+																direction);
 
 
 	if (new_cell == NULL) {

@@ -193,15 +193,15 @@ gnoridor_cell_click(GnoridorCell *self, gpointer data) {
 		}
 
 		if (gnoridor_cell_get_border_type (self) == Bottom_border ||
-		    gnoridor_cell_get_border_type (self) == Right_border  ||
-		    self->vertical_wall)
+			gnoridor_cell_get_border_type (self) == Right_border  ||
+			self->vertical_wall)
 		{
 			show_dialog_window("You cannot place a wall here !");
 			return FALSE;
 		}
 		if (gnoridor_board_can_place_wall (game_board, self, Vertical))
 		{
-      		gnoridor_board_place_wall (game_board, self, Vertical);
+			gnoridor_board_place_wall (game_board, self, Vertical);
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle), FALSE);
 
 			game_board->current_player->number_of_walls--;
@@ -262,9 +262,9 @@ static void draw_horizontal_wall(cairo_t *cr, guint width, guint height, int bor
 	if (border == Left_border || border == Up_left_corner)
 	  	start_x += 5;
 	if (border == Right_border || border == Up_right_corner)
-	  	end_x -= 5;
+		end_x -= 5;
 	if (border == Bottom_border || border == Bottom_left_corner ||
-	    border == Bottom_right_corner)
+		border == Bottom_right_corner)
 		return;
 	cairo_set_source_rgb(cr, 1, 0, 0);
 	cairo_set_line_width(cr, 7);
@@ -286,7 +286,7 @@ static void draw_vertical_wall(cairo_t *cr, guint width, guint height, int borde
 	if (border == Bottom_border || border == Bottom_left_corner)
 		end_y -= 5;
 	if (border == Right_border || border == Bottom_right_corner ||
-            border == Up_right_corner)
+		border == Up_right_corner)
 		return;
 
 
@@ -310,9 +310,9 @@ static void draw_cell(cairo_t *cr, guint width, guint height, guint size)
 	cairo_set_line_width(cr, 4.5);
 
 	cairo_rectangle(cr, x_center - size / 4,
-                        y_center - size / 4,
-                        size / 2 ,
-                        size / 2);
+					y_center - size / 4,
+					size / 2 ,
+					size / 2);
 
 	cairo_set_line_width(cr, 4);
 	cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -351,12 +351,12 @@ gnoridor_cell_draw (GtkWidget *widget, cairo_t *cr, gpointer data)
 	if (gnoridor_cell_horizontal_wall(GNORIDOR_CELL (widget)))
 	{
 		draw_horizontal_wall (cr, cell_allocation->width, cell_allocation->height,
-				      gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
+					gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
 	}
 	if (gnoridor_cell_vertical_wall(GNORIDOR_CELL (widget)))
 	{
 		draw_vertical_wall (cr, cell_allocation->width, cell_allocation->height,
-				    gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
+					gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
 	}
 	return FALSE;
 }

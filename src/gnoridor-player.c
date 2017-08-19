@@ -1,31 +1,23 @@
-/* #include "gnoridor-player.h" */
+#include "gnoridor-player.h"
 #include "gnoridor-cell.h"
 #include "callback.h"
+#include "gnoridor-define.h"
 
 G_DEFINE_TYPE (GnoridorPlayer, gnoridor_player, GTK_TYPE_WIDGET)
 
+
 GnoridorPlayer *
-gnoridor_player_new (void)
+gnoridor_player_new ()
 {
 	GnoridorPlayer *self = g_object_new (GNORIDOR_TYPE_PLAYER, NULL);
 	self->builder = gtk_builder_new_from_resource ("/org/gtk/gnoridor/src/resources/ui/action-popover.ui");
 	self->actions = GTK_WIDGET (gtk_builder_get_object (self->builder, "player_actions"));
 
 	// Get buttons from builder
-	GtkButton *up_bt = GTK_BUTTON (gtk_builder_get_object (self->builder, "up_b"));
-	GtkButton *down_bt = GTK_BUTTON (gtk_builder_get_object (self->builder, "down_b"));
-	GtkButton *left_bt = GTK_BUTTON (gtk_builder_get_object (self->builder, "left_b"));
-	GtkButton *right_bt = GTK_BUTTON (gtk_builder_get_object (self->builder, "right_b"));
-
-	// Connect them to their respective signals
-	g_signal_connect (G_OBJECT (up_bt), "clicked",
-					  G_CALLBACK (up_button_callback), self);
-	g_signal_connect (G_OBJECT (down_bt), "clicked",
-				  	  G_CALLBACK (down_button_callback), self);
-	g_signal_connect (G_OBJECT (left_bt), "clicked",
-				      G_CALLBACK (left_button_callback), self);
-	g_signal_connect (G_OBJECT (right_bt), "clicked",
-				      G_CALLBACK (right_button_callback), self);
+	self->buttons[Up] = GTK_BUTTON (gtk_builder_get_object (self->builder, "up_b"));
+	self->buttons[Down] = GTK_BUTTON (gtk_builder_get_object (self->builder, "down_b"));
+	self->buttons[Left] = GTK_BUTTON (gtk_builder_get_object (self->builder, "left_b"));
+	self->buttons[Right] = GTK_BUTTON (gtk_builder_get_object (self->builder, "right_b"));
 
 	return self;
 }
@@ -35,7 +27,7 @@ gnoridor_player_new_with_color (int color) {
 	GnoridorPlayer *self = gnoridor_player_new ();
 	self->id = color;
 	gnoridor_player_set_color (self, color);
-        gnoridor_player_color_int_to_char(self);
+	gnoridor_player_color_int_to_char(self);
 	return self;
 }
 
@@ -100,16 +92,15 @@ gnoridor_player_class_init (GnoridorPlayerClass *klass)
 void
 gnoridor_player_color_int_to_char (GnoridorPlayer *self)
 {
-    switch (self->id) {
-        case BLUE:
-            sprintf(self->name, "Blue");
-            break;
-        case RED:
-            sprintf(self->name, "Red");
-            break;
-        default:
-            sprintf(self->name, "Err");
-            break;
-    }
-
+	switch (self->id) {
+	case BLUE:
+		sprintf(self->name, "Blue");
+		break;
+	case RED:
+		sprintf(self->name, "Red");
+		break;
+	default:
+		sprintf(self->name, "Err");
+		break;
+	}
 }

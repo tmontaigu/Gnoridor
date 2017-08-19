@@ -10,6 +10,13 @@
 
 GnoridorBoard *game_board;
 
+typedef struct PlayerButtonCb_t
+{
+	GnoridorPlayer *player;
+	GnoridorBoard *board;
+}PlayerButtonCb;
+
+
 /*
  * function that draws the rectangle which represent the border of the board
  */

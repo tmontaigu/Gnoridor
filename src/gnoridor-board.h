@@ -37,7 +37,7 @@ struct _GnoridorBoard
 	GnoridorCell **player_cell;
 
 	gboolean placing_vertical_wall;
-  gboolean placing_horizontal_wall;
+	gboolean placing_horizontal_wall;
 
 	GtkWidget *window;
 	GtkWidget *vwall_toggle;

@@ -46,18 +46,18 @@ draw_board_limit (GtkWidget *widget, cairo_t *cr, gpointer data) {
 gboolean
 player_changed_callback (GnoridorBoard *board, gpointer data)
 {
-    printf("PLAYER CHANGED\n");
-    return FALSE;
+	printf("PLAYER CHANGED\n");
+	return FALSE;
 }
 
 void show_dialog_window(char *text)
 {
 	GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
 	GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (game_board->window),
-						    flags,
-						    GTK_MESSAGE_ERROR,
-						    GTK_BUTTONS_CLOSE,
-						    "%s", text);
+												flags,
+												GTK_MESSAGE_ERROR,
+												GTK_BUTTONS_CLOSE,
+												"%s", text);
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 
@@ -84,41 +84,41 @@ void prepare_vertical_wall_callback (GtkWidget *button, gpointer data)
 
 void
 up_button_callback (GtkWidget *button, gpointer data) {
-	GnoridorPlayer *player = data;
-	int succesful = gnoridor_board_request_move(game_board, player, Up);
-        if (succesful) {
-            gnoridor_board_change_current_player(game_board);
-            gtk_popover_popdown (GTK_POPOVER (player->actions));
-        }
+	PlayerButtonCb *d = data;
+	int succesful = gnoridor_board_request_move(d->board, d->player, Up);
+	if (succesful) {
+		gnoridor_board_change_current_player(d->board);
+		gtk_popover_popdown (GTK_POPOVER (d->player->actions));
+	}
 }
 
 void
 down_button_callback (GtkWidget *button, gpointer data) {
-	GnoridorPlayer *player = data;
-	int succesful = gnoridor_board_request_move(game_board, player, Down);
-        if (succesful) {
-            gnoridor_board_change_current_player(game_board);
-            gtk_popover_popdown (GTK_POPOVER (player->actions));
-        }
+	PlayerButtonCb *d = data;
+	int succesful = gnoridor_board_request_move(d->board, d->player, Down);
+	if (succesful) {
+		gnoridor_board_change_current_player(d->board);
+		gtk_popover_popdown (GTK_POPOVER (d->player->actions));
+	}
 }
 
 void
 left_button_callback (GtkWidget *button, gpointer data) {
-	GnoridorPlayer *player = data;
-	int succesful = gnoridor_board_request_move(game_board, player, Left);
-        if (succesful) {
-            gnoridor_board_change_current_player(game_board);
-            gtk_popover_popdown (GTK_POPOVER (player->actions));
-        }
+	PlayerButtonCb *d = data;
+	int succesful = gnoridor_board_request_move(d->board, d->player, Left);
+	if (succesful) {
+		gnoridor_board_change_current_player(d->board);
+		gtk_popover_popdown (GTK_POPOVER (d->player->actions));
+	}
 }
 
 void
 right_button_callback (GtkWidget *button, gpointer data) {
-	GnoridorPlayer *player = data;
-	int succesful = gnoridor_board_request_move(game_board, player, Right);
-        if (succesful) {
-            gnoridor_board_change_current_player(game_board);
-            gtk_popover_popdown (GTK_POPOVER (player->actions));
-        }
+	PlayerButtonCb *d = data;
+	int succesful = gnoridor_board_request_move(d->board, d->player, Right);
+	if (succesful) {
+		gnoridor_board_change_current_player(d->board);
+		gtk_popover_popdown (GTK_POPOVER (d->player->actions));
+	}
 }
 

@@ -3,9 +3,6 @@
 
 #include  <gtk/gtk.h>
 
-
-
-
 typedef struct _playerColor {
 	double r;
 	double g;
@@ -32,6 +29,7 @@ struct _GnoridorPlayer
 	/* Other members, including private data. */
 	GtkBuilder *builder;
 	GtkWidget *actions;
+	GtkButton *buttons[4]; /* Up, Down, Left, Right */
 	playerColor color;
 	int number_of_walls;
 	int id;
@@ -39,7 +37,7 @@ struct _GnoridorPlayer
 };
 
 
-GnoridorPlayer *gnoridor_player_new (void);
+GnoridorPlayer *gnoridor_player_new ();
 GnoridorPlayer *gnoridor_player_new_with_color (int color);
 void gnoridor_player_color (GnoridorPlayer *self, cairo_t *cr);
 void gnoridor_player_set_color (GnoridorPlayer *self, int color );

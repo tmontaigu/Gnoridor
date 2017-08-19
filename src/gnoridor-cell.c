@@ -1,34 +1,15 @@
 #include "gnoridor-cell.h"
-#include "callback.h"
 #include "gnoridor-define.h"
+#include "gnoridor-board.h"
+#include "callback.h"
 
 G_DEFINE_TYPE (GnoridorCell, gnoridor_cell, GTK_TYPE_DRAWING_AREA);
-
-
-/*
- * Callback where we do all the drawing stuff.
- * The cell draws itself, draws the player icon,
- * draws the walls
- *
- */
-static gboolean gnoridor_cell_draw(GtkWidget *widget, cairo_t *cr, gpointer data);
-
- /*
- * Callback when the user clicks on a cell
- * Behaviour :
- *  if the action is to place a wall, this callback handles the different calls
- *  to place them.
- *
- *  if a player is on the cell:
- *    Show the popover with the possible directions to move the player.
- */
-static gboolean gnoridor_cell_click(GnoridorCell *self, gpointer data);
-
 
 GnoridorCell *
 gnoridor_cell_new (void)
 {
-	return g_object_new (GNORIDOR_TYPE_CELL, NULL);
+	GnoridorCell *self = g_object_new (GNORIDOR_TYPE_CELL, NULL);
+	return self;
 }
 
 static void
@@ -41,11 +22,6 @@ static void
 gnoridor_cell_init (GnoridorCell *self)
 {
 	gtk_widget_add_events (GTK_WIDGET (self), GDK_BUTTON_PRESS_MASK);
-
-	g_signal_connect (G_OBJECT   (self), "draw",
-					  G_CALLBACK (gnoridor_cell_draw), NULL);
-	g_signal_connect (G_OBJECT   (self), "button_press_event",
-					  G_CALLBACK (gnoridor_cell_click), NULL);
 
 	self->player_on_cell = NULL;
 	self->vertical_wall = FALSE;
@@ -73,7 +49,7 @@ gnoridor_cell_is_not_empty (GnoridorCell *self){
 	return FALSE;
 }
 
-GnoridorPlayer  *
+GnoridorPlayer*
 gnoridor_cell_get_player_on_cell (GnoridorCell *self) {
 	if (gnoridor_cell_is_not_empty (self))
 		return self->player_on_cell;
@@ -180,15 +156,16 @@ gnoridor_cell_is_border (GnoridorCell *self)
 	return TRUE;
 }
 
-static gboolean
-gnoridor_cell_click(GnoridorCell *self, gpointer data) {
+gboolean
+gnoridor_cell_click(GnoridorCell *self, GdkEvent *event, gpointer data) {
+	GnoridorBoard *board = data;
 	// Vertical wall
-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle)))
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (board->vwall_toggle)))
 	{
-		if (game_board->current_player->number_of_walls <= 0)
+		if (board->current_player->number_of_walls <= 0)
 		{
-			show_dialog_window("You don't have any wall left !");
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle), FALSE);
+			show_dialog_window("You don't have any wall left !", board->window);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (board->hwall_toggle), FALSE);
 			return FALSE;
 		}
 
@@ -196,31 +173,31 @@ gnoridor_cell_click(GnoridorCell *self, gpointer data) {
 			gnoridor_cell_get_border_type (self) == Right_border  ||
 			self->vertical_wall)
 		{
-			show_dialog_window("You cannot place a wall here !");
+			show_dialog_window("You cannot place a wall here !", board->window);
 			return FALSE;
 		}
-		if (gnoridor_board_can_place_wall (game_board, self, Vertical))
+		if (gnoridor_board_can_place_wall (board, self, Vertical))
 		{
-			gnoridor_board_place_wall (game_board, self, Vertical);
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->vwall_toggle), FALSE);
+			gnoridor_board_place_wall (board, self, Vertical);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (board->vwall_toggle), FALSE);
 
-			game_board->current_player->number_of_walls--;
-			gnoridor_board_change_current_player (game_board);
+			board->current_player->number_of_walls--;
+			gnoridor_board_change_current_player (board);
 			return FALSE; // Player's turn is over
 		}
 		else
 		{
-			show_dialog_window ("You cannot place wall in a way that splits the board\n");
+			show_dialog_window ("You cannot place wall in a way that splits the board\n", board->window);
 			return FALSE;
 		}
 	}
 	// Horizontal wall
-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle)))
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (board->hwall_toggle)))
 	{
-		if (game_board->current_player->number_of_walls <= 0)
+		if (board->current_player->number_of_walls <= 0)
 		{
-			show_dialog_window("You don't have any wall left !");
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (game_board->hwall_toggle), FALSE);
+			show_dialog_window("You don't have any wall left !", board->window);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (board->hwall_toggle), FALSE);
 			return FALSE;
 		}
 
@@ -228,27 +205,27 @@ gnoridor_cell_click(GnoridorCell *self, gpointer data) {
 			gnoridor_cell_get_border_type (self) == Right_border  ||
 			self->horizontal_wall)
 		{
-			show_dialog_window("You cannot place a wall here !");
+			show_dialog_window("You cannot place a wall here !", board->window);
 			return FALSE;
 		}
 
-		if (gnoridor_board_can_place_wall (game_board, self	, Horizontal))
+		if (gnoridor_board_can_place_wall (board, self	, Horizontal))
 		{
-			gnoridor_board_place_wall (game_board, self, Horizontal);
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (game_board->hwall_toggle), FALSE);
+			gnoridor_board_place_wall (board, self, Horizontal);
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (board->hwall_toggle), FALSE);
 
-			game_board->current_player->number_of_walls--;
-			gnoridor_board_change_current_player (game_board);
+			board->current_player->number_of_walls--;
+			gnoridor_board_change_current_player (board);
 			return FALSE;
 		}
 		else
 		{
-			show_dialog_window ("You cannot place wall in a way that splits the board\n");
+			show_dialog_window ("You cannot place wall in a way that splits the board\n", board->window);
 			return FALSE;
 		}
 	}
 
-	if (self->player_on_cell && game_board->current_player == self->player_on_cell)
+	if (self->player_on_cell && board->current_player == self->player_on_cell)
 		gtk_popover_popup (GTK_POPOVER (self->player_on_cell->actions));
 	return FALSE;
 }
@@ -329,7 +306,7 @@ static void draw_player(cairo_t *cr, guint width, guint height, guint size) {
 	cairo_fill(cr);
 }
 
-static gboolean
+gboolean
 gnoridor_cell_draw (GtkWidget *widget, cairo_t *cr, gpointer data)
 {
 	GtkAllocation *cell_allocation = g_new (GtkAllocation, 1);
@@ -356,7 +333,7 @@ gnoridor_cell_draw (GtkWidget *widget, cairo_t *cr, gpointer data)
 	if (gnoridor_cell_vertical_wall(GNORIDOR_CELL (widget)))
 	{
 		draw_vertical_wall (cr, cell_allocation->width, cell_allocation->height,
-					gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
+				gnoridor_cell_get_border_type (GNORIDOR_CELL (widget)));
 	}
 	return FALSE;
 }

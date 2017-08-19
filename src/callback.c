@@ -50,10 +50,10 @@ player_changed_callback (GnoridorBoard *board, gpointer data)
 	return FALSE;
 }
 
-void show_dialog_window(char *text)
+void show_dialog_window(char *text, GtkWidget *window)
 {
 	GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
-	GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (game_board->window),
+	GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (window),
 												flags,
 												GTK_MESSAGE_ERROR,
 												GTK_BUTTONS_CLOSE,

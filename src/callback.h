@@ -8,7 +8,6 @@
 #include "gnoridor-board.h"
 #include "gnoridor-define.h"
 
-GnoridorBoard *game_board;
 
 typedef struct PlayerButtonCb_t
 {
@@ -32,7 +31,7 @@ gboolean player_changed_callback(GnoridorBoard *board, gpointer data);
  */
 void prepare_vertical_wall_callback(GtkWidget *button, gpointer data);
 void prepare_horizontal_wall_callback(GtkWidget *button, gpointer data);
-void show_dialog_window(char *text);
+void show_dialog_window(char *text, GtkWidget *window);
 
 /* player mouvement buttons callback */
 void up_button_callback(GtkWidget *button, gpointer data);

@@ -118,6 +118,25 @@ gboolean       gnoridor_cell_is_border (GnoridorCell *self);
  */
 int            gnoridor_cell_get_border_type (GnoridorCell *self);
 
+/*
+ * Callback where we do all the drawing stuff.
+ * The cell draws itself, draws the player icon,
+ * draws the walls
+ *
+ */
+gboolean gnoridor_cell_draw(GtkWidget *widget, cairo_t *cr, gpointer data);
+
+ /*
+ * Callback when the user clicks on a cell
+ * Behaviour :
+ *  if the action is to place a wall, this callback handles the different calls
+ *  to place them.
+ *
+ *  if a player is on the cell:
+ *    Show the popover with the possible directions to move the player.
+ */
+gboolean gnoridor_cell_click(GnoridorCell *self, GdkEvent *event, gpointer data);
+
 
 
 G_END_DECLS

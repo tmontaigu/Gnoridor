@@ -42,8 +42,7 @@ activate (GtkApplication *app,
 	gtk_window_set_title (GTK_WINDOW (window), "Gnoridor");
 	gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
 
-
-	// The header bar
+	// Thear header bar
 	header_bar = gtk_header_bar_new ();
 	gtk_header_bar_set_title (GTK_HEADER_BAR (header_bar), "Gnoridor");
 	gtk_header_bar_set_subtitle (GTK_HEADER_BAR (header_bar), "Merde");
@@ -59,7 +58,6 @@ activate (GtkApplication *app,
 
 	board = gnoridor_board_new ();
 	gnoridor_board_set_window (board, window);
-	game_board = board; // Set the global variable
 
 	GtkWidget *new_game_bt = gtk_button_new_with_label ("New Game");
 	g_signal_connect (new_game_bt, "clicked", G_CALLBACK (new_game_callback), board);
@@ -77,7 +75,6 @@ activate (GtkApplication *app,
 	sprintf(label_text, "Current player:\nBlue");
 	current_player_label = gtk_label_new (label_text);
 
-
 	GtkWidget *place_hwall_button, *place_vwall_button;
 	place_hwall_button = gtk_toggle_button_new_with_label ("Place Horizontal Wall");
 	place_vwall_button = gtk_toggle_button_new_with_label ("Place Vertical Wall");
@@ -85,28 +82,24 @@ activate (GtkApplication *app,
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (place_hwall_button), FALSE);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (place_vwall_button), FALSE);
 
-
 	/*
 	g_signal_connect (place_hwall_button, "toggled",
-                     G_CALLBACK (prepare_horizontal_wall_callback),
-                     board);
+					  G_CALLBACK (prepare_horizontal_wall_callback),
+					  board);
 
 	g_signal_connect (place_vwall_button, "toggled",
-                     G_CALLBACK (prepare_vertical_wall_callback),
-                     board);
+					  G_CALLBACK (prepare_vertical_wall_callback),
+					  board);
 	*/
 
 	board->vwall_toggle = place_vwall_button;
 	board->hwall_toggle = place_hwall_button;
-
-
 
 	GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
 	gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 	gtk_container_add (GTK_CONTAINER (box), current_player_label);
 	gtk_container_add (GTK_CONTAINER (box), place_vwall_button);
 	gtk_container_add (GTK_CONTAINER (box), place_hwall_button);
-
 
 	gtk_box_pack_start (GTK_BOX (game_box), overlay, TRUE, TRUE, 5);
 	gtk_box_pack_start (GTK_BOX (game_box), box, FALSE, FALSE, 5);

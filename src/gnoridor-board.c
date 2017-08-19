@@ -49,6 +49,15 @@ connect_player_buttons(GnoridorBoard *self, GnoridorPlayer *player)
 					  G_CALLBACK (right_button_callback), data);
 }
 
+static void
+connect_cell_callbacks(GnoridorBoard *self, GnoridorCell *cell)
+{
+	g_signal_connect (G_OBJECT   (cell), "draw",
+					  G_CALLBACK (gnoridor_cell_draw), NULL);
+	g_signal_connect (G_OBJECT   (cell), "button_press_event",
+					  G_CALLBACK (gnoridor_cell_click), self);
+}
+
 
 static void
 gnoridor_board_set_players(GnoridorBoard *self)
@@ -76,6 +85,7 @@ gnoridor_board_set_players(GnoridorBoard *self)
 	}
 }
 
+
 static void
 gnoridor_board_init (GnoridorBoard *self)
 {
@@ -91,9 +101,9 @@ gnoridor_board_init (GnoridorBoard *self)
 		for (int j = 0; j < NUMBER_OF_COLS; j++)
 		{
 			self->cells[i][j] = gnoridor_cell_new ();
+			connect_cell_callbacks(self, self->cells[i][j]);
 			self->cells[i][j]->row = i;
 			self->cells[i][j]->col = j;
-
 			gtk_grid_attach (GTK_GRID (self),
 			GTK_WIDGET (self->cells[i][j]), j, i, 1,1);
 		}
@@ -232,7 +242,7 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 
 
 	if (new_cell == NULL) {
-		show_dialog_window("You cannot move in this direction");
+		show_dialog_window("You cannot move in this direction", self->window);
 		return FALSE;
 	}
 
@@ -252,7 +262,7 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 	{
 		char text[20];
 		sprintf(text, "%s player wins", player->name);
-		show_dialog_window(text);
+		show_dialog_window(text, self->window);
 
 	}
 	return TRUE;

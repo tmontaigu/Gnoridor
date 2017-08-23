@@ -44,7 +44,7 @@ gnoridor_cell_remove_player (GnoridorCell *self)
 
 gboolean
 gnoridor_cell_is_not_empty (GnoridorCell *self){
-	if (self->player_on_cell)
+	if (self != NULL && self->player_on_cell)
 		 return TRUE;
 	return FALSE;
 }

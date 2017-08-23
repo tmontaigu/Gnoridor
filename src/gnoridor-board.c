@@ -171,7 +171,7 @@ gnoridor_board_check_direction(GnoridorBoard *self, GnoridorCell *old_cell, int 
 			return NULL;
 		break;
 	case Down:
-		if (old_cell->row+1 >= 9)
+		if (old_cell->row+1 >= NUMBER_OF_ROWS)
 			return NULL;
 		new_cell = self->cells[old_cell->row+1][old_cell->col];
 		if (gnoridor_cell_horizontal_wall(old_cell))
@@ -185,7 +185,7 @@ gnoridor_board_check_direction(GnoridorBoard *self, GnoridorCell *old_cell, int 
 			return NULL;
 		break;
 	case Right:
-		if (old_cell->col+1 >= 9)
+		if (old_cell->col+1 >= NUMBER_OF_COLS)
 			return NULL;
 		new_cell = self->cells[old_cell->row][old_cell->col+1];
 		if (gnoridor_cell_vertical_wall(old_cell))

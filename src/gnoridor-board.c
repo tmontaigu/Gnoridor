@@ -433,3 +433,11 @@ gnoridor_board_set_window (GnoridorBoard *self, GtkWidget *window)
 	self->window = window;
 }
 
+
+#ifdef UNIT_TEST
+GnoridorCell *
+run_check_dir(GnoridorBoard *b, GnoridorCell *cell, Direction dir)
+{
+	return gnoridor_board_check_direction(b, cell, dir);
+}
+#endif

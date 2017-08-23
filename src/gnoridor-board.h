@@ -5,6 +5,7 @@
 
 #include "gnoridor-player.h"
 #include "gnoridor-cell.h"
+#include "gnoridor-define.h"
 
 
 int notify_player_signal;
@@ -58,5 +59,13 @@ void           gnoridor_board_place_wall (GnoridorBoard *self, GnoridorCell *cel
 void           gnoridor_board_reset (GnoridorBoard *self);
 void           connect_cells (GnoridorBoard *self);
 G_END_DECLS
+
+#ifdef UNIT_TEST
+GnoridorCell* run_check_dir(GnoridorBoard *b,
+                            GnoridorCell *cell,
+                            Direction     direction);
+#endif
+
+
 
 #endif

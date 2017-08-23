@@ -240,30 +240,32 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 																 direction);
 
 
-	if (new_cell == NULL) {
+	if (new_cell == NULL)
+	{
 		show_dialog_window("You cannot move in this direction", self->window);
 		return FALSE;
 	}
 
 	if (self->current_player != player)
 	{
-	printf("Not players turn\n");
-	// To make sure the AI won't be able to move multiple times
-	gtk_popover_popdown( GTK_POPOVER (player->actions));
-	return FALSE;
+		printf("Not players turn\n");
+		gtk_popover_popdown( GTK_POPOVER (player->actions));
+		// To make sure the AI won't be able to move multiple times
+		return FALSE;
 	}
 
 	gnoridor_cell_remove_player (old_cell);
 	gnoridor_cell_put_player (new_cell, player);
 	gnoridor_board_set_player_cell(self, player->id, new_cell);
+
 	gboolean player_wins = gnoridor_board_check_win (self, player);
-	if (player_wins) // show popup window
+	if (player_wins)
 	{
 		char text[20];
 		sprintf(text, "%s player wins", player->name);
 		show_dialog_window(text, self->window);
-
 	}
+	gnoridor_board_change_current_player(self);
 	return TRUE;
 }
 

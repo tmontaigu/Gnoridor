@@ -87,7 +87,6 @@ up_button_callback (GtkWidget *button, gpointer data) {
 	PlayerButtonCb *d = data;
 	int succesful = gnoridor_board_request_move(d->board, d->player, Up);
 	if (succesful) {
-		gnoridor_board_change_current_player(d->board);
 		gtk_popover_popdown (GTK_POPOVER (d->player->actions));
 	}
 }
@@ -97,7 +96,6 @@ down_button_callback (GtkWidget *button, gpointer data) {
 	PlayerButtonCb *d = data;
 	int succesful = gnoridor_board_request_move(d->board, d->player, Down);
 	if (succesful) {
-		gnoridor_board_change_current_player(d->board);
 		gtk_popover_popdown (GTK_POPOVER (d->player->actions));
 	}
 }
@@ -107,7 +105,6 @@ left_button_callback (GtkWidget *button, gpointer data) {
 	PlayerButtonCb *d = data;
 	int succesful = gnoridor_board_request_move(d->board, d->player, Left);
 	if (succesful) {
-		gnoridor_board_change_current_player(d->board);
 		gtk_popover_popdown (GTK_POPOVER (d->player->actions));
 	}
 }
@@ -117,7 +114,6 @@ right_button_callback (GtkWidget *button, gpointer data) {
 	PlayerButtonCb *d = data;
 	int succesful = gnoridor_board_request_move(d->board, d->player, Right);
 	if (succesful) {
-		gnoridor_board_change_current_player(d->board);
 		gtk_popover_popdown (GTK_POPOVER (d->player->actions));
 	}
 }

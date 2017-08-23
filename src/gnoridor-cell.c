@@ -86,9 +86,9 @@ gnoridor_cell_remove_temporary_wall(GnoridorCell *self, WallOrientation wall_or)
 void
 gnoridor_cell_remove_walls(GnoridorCell *self)
 {
-  self->horizontal_wall = FALSE;
-  self->vertical_wall = FALSE;
-  gtk_widget_queue_draw (GTK_WIDGET (self));
+	self->horizontal_wall = FALSE;
+	self->vertical_wall = FALSE;
+	gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
 void
@@ -151,7 +151,7 @@ gboolean
 gnoridor_cell_is_border (GnoridorCell *self)
 {
 	if ( (self->row > 0 && self->row < NUMBER_OF_ROWS - 1) &&
-	   (self->col > 0 && self->col < NUMBER_OF_COLS - 1))
+		(self->col > 0 && self->col < NUMBER_OF_COLS - 1))
 		return FALSE;
 	return TRUE;
 }
@@ -237,7 +237,7 @@ static void draw_horizontal_wall(cairo_t *cr, guint width, guint height, int bor
 	double end_y   = height;
 
 	if (border == Left_border || border == Up_left_corner)
-	  	start_x += 5;
+		start_x += 5;
 	if (border == Right_border || border == Up_right_corner)
 		end_x -= 5;
 	if (border == Bottom_border || border == Bottom_left_corner ||

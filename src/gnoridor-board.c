@@ -19,15 +19,15 @@ static void
 gnoridor_board_class_init (GnoridorBoardClass *class)
 {
 	notify_player_signal = g_signal_newv("notify_player",
-										G_TYPE_FROM_CLASS (class),
-										G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-										NULL /* closure */,
-										NULL /* accumulator */,
-										NULL /* accumulator data */,
-										NULL /* C marshaller */,
-										G_TYPE_NONE /* return_type */,
-										0     /* n_params */,
-										NULL  /* param_types */);
+										 G_TYPE_FROM_CLASS (class),
+										 G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+										 NULL /* closure */,
+										 NULL /* accumulator */,
+										 NULL /* accumulator data */,
+										 NULL /* C marshaller */,
+										 G_TYPE_NONE /* return_type */,
+										 0     /* n_params */,
+										 NULL  /* param_types */);
 	printf("gnoridor_board_class_init\n");
 }
 
@@ -85,7 +85,6 @@ gnoridor_board_set_players(GnoridorBoard *self)
 	}
 }
 
-
 static void
 gnoridor_board_init (GnoridorBoard *self)
 {
@@ -113,13 +112,12 @@ gnoridor_board_init (GnoridorBoard *self)
 	self->player = malloc (sizeof * self->player * self->number_of_player);
 	self->player_cell = malloc (sizeof * self->player_cell * self->number_of_player);
 
-  gnoridor_board_set_players (self);
+	gnoridor_board_set_players (self);
 
 	self->window = NULL;
 	self->placing_vertical_wall = FALSE;
 }
 
-//TODO hmm check that every thing is done
 //TODO Block mouvement when someone wins or automatically restart game
 void
 gnoridor_board_reset (GnoridorBoard *self)
@@ -130,7 +128,6 @@ gnoridor_board_reset (GnoridorBoard *self)
 		{
 			gnoridor_cell_remove_walls (self->cells[i][j]);
 		}
-
 	}
 
 	for (int i = 0; i < self->number_of_player; ++i)
@@ -204,7 +201,9 @@ static GnoridorCell *
 gnoridor_board_check_move_validity (GnoridorBoard *self, GnoridorCell *old_cell,
 									int direction)
 {
-	GnoridorCell *new_cell = gnoridor_board_check_direction(self, old_cell, direction);
+	GnoridorCell *new_cell = gnoridor_board_check_direction(self,
+															old_cell,
+															direction);
 
 	if (gnoridor_cell_is_not_empty (new_cell))
 		new_cell = NULL;
@@ -237,8 +236,8 @@ gnoridor_board_request_move(GnoridorBoard *self, GnoridorPlayer *player, int dir
 
 	GnoridorCell *old_cell = gnoridor_board_get_player_cell (self, player->id);
 	GnoridorCell *new_cell = gnoridor_board_check_move_validity (self,
-																old_cell,
-																direction);
+																 old_cell,
+																 direction);
 
 
 	if (new_cell == NULL) {

@@ -39,6 +39,7 @@ gnoridor_cell_put_player (GnoridorCell *self, GnoridorPlayer *player)
 void
 gnoridor_cell_remove_player (GnoridorCell *self)
 {
+	g_return_if_fail(self != NULL);
 	self->player_on_cell = NULL;
 }
 

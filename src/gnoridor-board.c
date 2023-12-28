@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
+int notify_player_signal = 0;
+
 G_DEFINE_TYPE (GnoridorBoard, gnoridor_board, GTK_TYPE_GRID);
 
 GnoridorBoard *

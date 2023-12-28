@@ -8,7 +8,7 @@
 #include "gnoridor-define.h"
 
 
-int notify_player_signal;
+extern int notify_player_signal;
 G_BEGIN_DECLS
 
 
